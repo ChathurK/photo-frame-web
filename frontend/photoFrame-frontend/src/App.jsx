@@ -25,11 +25,11 @@ function App() {
   };
 
   return (
-    <div className="bg-gray-light min-h-screen">
+    <div className="min-h-screen bg-gray-light">
       <LanguageSelector onLanguageSelect={handleLanguageSelect} />
       
       {currentPage === 'home' ? (
-        <div className="max-w-container mx-auto px-5 pb-8">
+        <div className="px-5 pb-8 mx-auto max-w-container">
           <Header 
             language={selectedLanguage} 
             translations={translations} 

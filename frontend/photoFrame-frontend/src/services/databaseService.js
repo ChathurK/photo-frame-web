@@ -23,6 +23,7 @@ class DatabaseService {
           customerAddress: orderData.customerAddress,
           customerWhatsapp: orderData.customerWhatsapp,
           deliveryTo: orderData.deliveryTo,
+          deliveryDate: orderData.deliveryDate,
           backgroundColor: orderData.backgroundColor,
           imageUrl: orderData.imageUrl,
           notes: orderData.notes
@@ -38,7 +39,7 @@ class DatabaseService {
       return {
         success: result.success,
         message: result.message,
-        data: result.data  // Keep the original data structure
+        data: result.data
       };
     } catch (error) {
       console.error('Error saving order:', error);

@@ -11,15 +11,16 @@ const PORT = process.env.API_PORT || 3001;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' })); // Increased limit for image uploads
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Database configuration
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'photoframe_db',
-  port: parseInt(process.env.DB_PORT) || 3306,
+  database: process.env.DB_NAME || 'photoframe',
+  port: parseInt(process.env.DB_PORT) || 3307,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -36,6 +37,7 @@ async function testConnection() {
     connection.release();
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
+    console.error('Database config:', { ...dbConfig, password: '***' });
   }
 }
 
@@ -126,6 +128,7 @@ app.post('/api/orders', async (req, res) => {
       customerAddress,
       customerWhatsapp,
       deliveryTo,
+      deliveryDate,
       totalAmount,
       numberOfPersons,
       backgroundColor,
@@ -143,18 +146,29 @@ app.post('/api/orders', async (req, res) => {
 
     // Insert order
     const [orderResult] = await connection.execute(
-      `INSERT INTO orders (customer_name, customer_address, customer_whatsapp, delivery_to, total_amount, created_at) 
-       VALUES (?, ?, ?, ?, ?, NOW())`,
-      [customerName, customerAddress, customerWhatsapp, deliveryTo || customerAddress, totalAmount || 0]
+      `INSERT INTO orders (customer_name, customer_address, customer_whatsapp, delivery_to, delivery_date, total_amount, created_at) 
+       VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+      [customerName, customerAddress, customerWhatsapp, deliveryTo || customerAddress, deliveryDate || null, totalAmount || 0]
     );
 
     const orderId = orderResult.insertId;
 
-    // Insert order item
+    // Insert order item (convert undefined to null for MySQL)
     await connection.execute(
       `INSERT INTO order_items (order_id, category_id, design_sample_id, frame_type_id, size_id, frame_color_id, number_of_persons, background_color, image_url, notes) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [orderId, categoryId, designSampleId, frameTypeId, sizeId, frameColorId, numberOfPersons || 1, backgroundColor, imageUrl, notes]
+      [
+        orderId, 
+        categoryId, 
+        designSampleId || null, 
+        frameTypeId, 
+        sizeId, 
+        frameColorId || null, 
+        numberOfPersons || 1, 
+        backgroundColor || null, 
+        imageUrl || null, 
+        notes || null
+      ]
     );
 
     await connection.commit();
@@ -261,13 +275,21 @@ app.delete('/api/orders/:id', async (req, res) => {
 // GET /api/categories - Get all categories
 app.get('/api/categories', async (req, res) => {
   try {
+    console.log('🔄 Fetching categories...');
     const [rows] = await pool.execute('SELECT * FROM categories ORDER BY name');
+    console.log('✅ Categories fetched:', rows.length, 'items');
+    console.log('Categories data:', rows);
     res.json({
       success: true,
       data: rows
     });
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error('❌ Error fetching categories:', error);
+    console.error('Error details:', {
+      code: error.code,
+      errno: error.errno,
+      sqlMessage: error.sqlMessage || error.message
+    });
     res.status(500).json({
       success: false,
       message: 'Failed to fetch categories',

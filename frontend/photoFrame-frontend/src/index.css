@@ -46,4 +46,12 @@
   .form-group textarea:focus {
     @apply shadow-md;
   }
+
+  .image-upload-area {
+    @apply border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors cursor-pointer;
+  }
+  
+  .image-upload-area:hover {
+    @apply border-green-2 bg-green-50;
+  }
 }
