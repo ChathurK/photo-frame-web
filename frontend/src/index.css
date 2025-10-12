@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Inter", sans-serif;
+  }
+}
+
+@layer components {
+  .category-card {
+    @apply border border-gray-200 bg-white transition-all duration-300;
+  }
+
+  .category-card:hover {
+    @apply border-green-2;
+  }
+
+  .category-card.selected {
+    @apply border-green-2 bg-green-50;
+  }
+
+  .form-step {
+    @apply min-h-[400px];
+  }
+
+  .form-group {
+    @apply mb-0;
+  }
+
+  .form-group label {
+    @apply text-base;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    @apply transition-all duration-200;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    @apply shadow-md;
+  }
+
+  .image-upload-area {
+    @apply cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors;
+  }
+
+  .image-upload-area:hover {
+    @apply border-green-2 bg-green-50;
+  }
+}
