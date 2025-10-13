@@ -4,13 +4,13 @@ export const translations = {
       works: "Our Works",
       testimonials: "Testimonials",
       promo: "Promo",
-      order: "Order",
+      order: "Order Now",
     },
     hero: {
       title: "Turn Your Memories Into Art",
       description:
         "Upload your photo, choose oil painting, Ghibli style, or more. Delivered as a beautiful framed artwork straight to your home.",
-      cta: "Place an Order",
+      cta: "Order Now",
     },
     works: {
       title: "Our Works",

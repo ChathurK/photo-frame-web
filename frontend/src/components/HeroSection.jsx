@@ -5,7 +5,7 @@ import heroImage3 from "../assets/mini frames/6.jpg";
 import heroImage4 from "../assets/Ghibli collection/8.jpg";
 
 const HeroSection = ({ language, translations }) => {
-  const t = translations[language];
+  const lang = translations[language];
 
   const handleOrderClick = () => {
     // Scroll to order section
@@ -13,24 +13,24 @@ const HeroSection = ({ language, translations }) => {
   };
 
   return (
-    <section className="mb-8 mt-12 grid items-center gap-12 md:grid-cols-2">
-      <div className="space-y-6">
-        <h1 className="text-4xl font-bold leading-tight text-green-3 md:text-5xl">
-          {t.hero.title}
+    <section className="grid items-center justify-items-center max-md:gap-8 mt-2 md:grid-cols-2 md:mt-2">
+      <div className="flex flex-col items-center ml-3 px-6 space-y-6">
+        <h1 className="text-4xl max-md:text-center font-bold text-green-3 md:text-5xl">
+          {lang.hero.title}
         </h1>
-        <p className="text-lg leading-relaxed text-gray-600">
-          {t.hero.description}
+        <p className="text-lg max-md:text-center text-gray-600">
+          {lang.hero.description}
         </p>
         <button
           onClick={handleOrderClick}
-          className="rounded-lg bg-green-2 px-8 py-4 font-semibold text-white shadow-lg transition-colors hover:bg-green-1 hover:shadow-xl"
+          className="rounded-lg bg-green-2 w-fit max-md:px-6 max-md:py-3 px-8 py-4 font-semibold text-lg text-white shadow-lg transition-colors duration-300 hover:bg-green-1"
         >
-          {t.hero.cta}
+          {lang.hero.cta}
         </button>
       </div>
       <div className="relative">
         {/* Main showcase image */}
-        <div className="relative overflow-hidden rounded-custom shadow-2xl">
+        <div className="relative w-full max-h-80 overflow-hidden rounded-xl shadow-2xl">
           <img
             src={heroImage1}
             alt="Featured photo frame artwork"
