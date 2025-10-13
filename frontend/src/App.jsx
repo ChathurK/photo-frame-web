@@ -30,7 +30,7 @@ function App() {
       <LanguageSelector onLanguageSelect={handleLanguageSelect} />
 
       {currentPage === "home" ? (
-        <div className="mx-auto max-w-screen-xl">
+        <div className="mx-auto max-w-full">
           <Header
             language={selectedLanguage}
             translations={translations}
