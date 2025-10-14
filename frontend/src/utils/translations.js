@@ -40,6 +40,25 @@ export const translations = {
       title: "Why Choose Us",
       description:
         "We specialize in transforming your cherished photos into artistic masterpieces. Whether you want a timeless oil painting or a whimsical Ghibli-inspired design, our artists ensure each frame tells your story beautifully. Delivered right to your doorstep with care.",
+      features: {
+        artisticExcellence: {
+          title: "Artistic Excellence",
+          description:
+            "Handcrafted by skilled artists with attention to detail",
+        },
+        premiumQuality: {
+          title: "Premium Quality",
+          description: "High-quality materials and professional finishing",
+        },
+        freeDelivery: {
+          title: "Free Delivery",
+          description: "Island-wide delivery at no extra cost",
+        },
+        madeWithLove: {
+          title: "Made with Love",
+          description: "Each piece crafted with care and dedication",
+        },
+      },
     },
     testimonials: {
       title: "Testimonials",
@@ -205,6 +224,25 @@ export const translations = {
       title: "ඇයි අපව තෝරන්නේ",
       description:
         "අපි ඔබේ ප්‍රිය ඡායාරූප කලාත්මක걸작로 පරිවර්තනය කිරීමේ විශේෂඥයින්. ඔබට කාලානුරූප තෙල් සිතුවමක් හෝ විහිළුකාර ගිබ්ලි-ආනුභාව සැලසුමක් අවශ්‍ය වුවද, අපේ කලාකරුවන් සෑම රාමුවක්ම ඔබේ කතාව ලස්සනින් කියන බව සහතික කරයි. සෙනෙහසින් යුතුව ඔබේ දොරටුවට ගෙන දෙනු ලැබේ.",
+      features: {
+        artisticExcellence: {
+          title: "කලාත්මක විශිෂ්ටත්වය",
+          description:
+            "විස්තරයට අවධානය යොමු කරමින් දක්ෂ කලාකරුවන් විසින් අතින් සාදන ලදී",
+        },
+        premiumQuality: {
+          title: "ප්‍රිමියම් ගුණාත්මකභාවය",
+          description: "ඉහළ-ගුණාත්මක ද්‍රව්‍ය සහ වෘත්තීය නිමාව",
+        },
+        freeDelivery: {
+          title: "නිදහස් බෙදාහැරීම",
+          description: "අතිරේක වියදම් රහිතව දිවයින පුරා බෙදාහැරීම",
+        },
+        madeWithLove: {
+          title: "සෙනෙහසින් සාදන ලදී",
+          description: "සෑම කෘතියක්ම සෙනෙහසින් සහ කැපවීමෙන් සාදන ලදී",
+        },
+      },
     },
     testimonials: {
       title: "සාක්ෂි",
