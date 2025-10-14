@@ -113,10 +113,10 @@ const AboutSection = ({ language, translations }) => {
       </div>
 
       {/* Background Decorative Elements */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      {/* <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-32 top-0 h-[400px] w-[400px] animate-float rounded-full bg-green-600/5 blur-3xl"></div>
         <div className="absolute -bottom-32 -right-32 h-[400px] w-[400px] animate-float-delayed rounded-full bg-green-400/5 blur-3xl"></div>
-      </div>
+      </div> */}
     </section>
   );
 };
