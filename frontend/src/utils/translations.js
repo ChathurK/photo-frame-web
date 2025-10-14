@@ -62,18 +62,7 @@ export const translations = {
     },
     testimonials: {
       title: "Testimonials",
-      testimonial1: {
-        text: "Absolutely loved the oil painting version of my family photo!",
-        author: "– Anushka",
-      },
-      testimonial2: {
-        text: "The Ghibli-style frame was magical. Perfect gift for my sister.",
-        author: "– Kasun",
-      },
-      testimonial3: {
-        text: "Great service and quick delivery. Highly recommend.",
-        author: "– Nadeesha",
-      },
+      description: "Hear what our happy customers have to say about their experience",
     },
     order: {
       title: "Order Your Master Piece",
@@ -246,18 +235,7 @@ export const translations = {
     },
     testimonials: {
       title: "සාක්ෂි",
-      testimonial1: {
-        text: "මගේ පවුලේ ඡායාරූපයේ තෙල් සිතුවම් අනුවාදය මම සම්පූර්ණයෙන්ම ප්‍රිය කළා!",
-        author: "– අනුෂ්කා",
-      },
-      testimonial2: {
-        text: "ගිබ්ලි-ශෛලියේ රාමුව ඉන්ද්‍රජාලික විය. මගේ සහෝදරිය සඳහා පරිපූර්ණ තෑග්ගක්.",
-        author: "– කසුන්",
-      },
-      testimonial3: {
-        text: "විශිෂ්ට සේවාව සහ ඉක්මන් බෙදාහැරීම. ඉතා නිර්දේශ කරමි.",
-        author: "– නදීෂා",
-      },
+      description: "අපගේ සතුටු පාරිභෝගිකයන් ඔවුන්ගේ අත්දැකීම් පිළිබඳව කියන දේ අසා බලන්න",
     },
     order: {
       title: "ඔබේ රාමුව ඇණවුම් කරන්න",
