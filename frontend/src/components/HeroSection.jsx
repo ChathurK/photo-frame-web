@@ -37,7 +37,7 @@ const HeroSection = ({ language, translations }) => {
 
   return (
     <section className="relative overflow-visible pb-12 pt-4 md:pb-20 md:pt-4">
-      <div className="animate-slideInBottom container mx-auto px-4">
+      <div className="container mx-auto animate-slideInBottom px-4">
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
           {/* Left Content */}
           <div className="flex flex-col space-y-6 md:space-y-8">
@@ -61,7 +61,7 @@ const HeroSection = ({ language, translations }) => {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl font-bold text-green-3 md:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-bold leading-tight text-green-3 md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight">
               {lang.hero.title}
             </h1>
 
@@ -194,13 +194,13 @@ const HeroSection = ({ language, translations }) => {
       </div>
 
       {/* Background Decorative Elements | Reduce the opacity of App.jsx component's background color*/}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        {/* Grid pattern */}
+      {/* <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        Grid pattern
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        {/* Gradient blobs */}
+        Gradient blobs
         <div className="absolute -left-32 top-0 h-[500px] w-[500px] animate-float rounded-full bg-green-600/10 blur-3xl"></div>
         <div className="absolute -bottom-0 -right-32 h-[600px] w-[600px] animate-float-delayed rounded-full bg-green-400/10 blur-3xl"></div>
-      </div>
+      </div> */}
     </section>
   );
 };
