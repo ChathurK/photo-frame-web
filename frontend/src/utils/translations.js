@@ -68,7 +68,9 @@ export const translations = {
       title: "Order Your Master Piece",
       subtitle: "Create your perfect custom frame in just a few steps",
       orderOnline: "Order Online",
-      cta: "Place Your Order via WhatsApp",
+      orderOnlineBtn: "Start Order Form",
+      orderWhatsapp: "Order via WhatsApp",
+      orderWhatsappBtn: "Place Your Order via WhatsApp",
       whatsappMessage:
         "Hi! I'm interested in ordering a custom photo frame. Can you please provide more details?",
       steps: {
@@ -241,7 +243,9 @@ export const translations = {
       title: "ඔබේ රාමුව ඇණවුම් කරන්න",
       subtitle: "පියවර කිහිපයකින් ඔබේ පරිපූර්ණ අභිරුචි රාමුව සාදන්න",
       orderOnline: "අන්තර්ජාලයෙන් ඇණවුම් කරන්න",
-      cta: "WhatsApp හරහා ඔබේ ඇණවුම ගබඩා කරන්න",
+      orderOnlineBtn: "ඇණවුම් පෝරමය ආරම්භ කරන්න",
+      orderWhatsapp: "WhatsApp හරහා ඇණවුම් කරන්න",
+      orderWhatsappBtn: "WhatsApp හරහා ඔබේ ඇණවුම ගබඩා කරන්න",
       whatsappMessage:
         "හායි! මම අභිරුචි ඡායාරූප රාමුවක් ඇණවුම් කිරීමට උනන්දුයි. කරුණාකර වැඩි විස්තර ලබා දෙන්න?",
       steps: {
