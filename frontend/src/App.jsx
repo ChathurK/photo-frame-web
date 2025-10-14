@@ -40,11 +40,10 @@ function App() {
             language={selectedLanguage}
             translations={translations}
           />
-          <WorksSection
+          <GallerySection
             language={selectedLanguage}
             translations={translations}
           />
-          <GallerySection />
           <AboutSection
             language={selectedLanguage}
             translations={translations}

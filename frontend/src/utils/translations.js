@@ -12,11 +12,29 @@ export const translations = {
         "Upload your photo, choose oil painting, Ghibli style, or more. Delivered as a beautiful framed artwork straight to your home.",
       cta: "Order Now",
     },
-    works: {
-      title: "Our Works",
-      oilPainting: "Oil Painting Style",
-      ghibliStyle: "Ghibli Painting Style",
-      classicPortrait: "Classic Portrait Frame",
+    gallery: {
+      title: "Our Gallery",
+      description:
+        "Discover our curated collection of premium photo frames and artwork",
+      _100Design: {
+        title: "100 Designs",
+        description:
+          "Our extensive gallery of over 100 unique designs across various styles and themes",
+      },
+      oilPainting: {
+        title: "Oil Painting",
+        description:
+          "Classic oil painting style portraits with rich textures and vibrant colors",
+      },
+      ghibli: {
+        title: "Ghibli Painting",
+        description:
+          "Magical Studio Ghibli inspired artwork with whimsical charm",
+      },
+      miniFrames: {
+        title: "Mini Frames",
+        description: "Compact and elegant mini frames perfect for any space",
+      },
     },
     about: {
       title: "Why Choose Us",
@@ -159,11 +177,29 @@ export const translations = {
         "ඔබේ ඡායාරූපය උඩුගත කරන්න, තෙල් සිතුවම, ගිබ්ලි ශෛලිය හෝ තවත් ඒවා තෝරන්න. ලස්සන රාමු කළ කලාකෘතියක් ලෙස සෘජුවම ඔබේ නිවසට ගෙන දෙනු ලැබේ.",
       cta: "ඇණවුමක් ගබඩා කරන්න",
     },
-    works: {
-      title: "අපේ වැඩ",
-      oilPainting: "තෙල් සිතුවම් ශෛලිය",
-      ghibliStyle: "ගිබ්ලි සිතුවම් ශෛලිය",
-      classicPortrait: "සම්භාව්‍ය ප්‍රතිමූර්ති රාමුව",
+    gallery: {
+      title: "අපේ ගැලරිය",
+      description:
+        "විවිධ ශෛලී සහ තේමාවල පුරා අද්විතීය නිර්මාණ 100 කට වැඩි අපගේ පුළුල් ගැලරියෙන් කිහිපයක්",
+      _100Design: {
+        title: "අද්විතීය නිර්මාණ 100+",
+        description:
+          "විවිධ ශෛලී සහ තේමාවල පුරා අද්විතීය නිර්මාණ 100 කට වැඩි අපගේ පුළුල් ගැලරිය සොයා බලන්න. ඔබේ මතක සහ නිරූපණ ප්‍රියතා සමඟ ගැලපෙන පරිපූර්ණ රාමුව සොයා ගන්න",
+      },
+      oilPainting: {
+        title: "තෙල් සිතුවම් ශෛලිය",
+        description:
+          "සම්ප්‍රදායික තෙල් සිතුවම් ශෛලියේ පෝට්‍රෙට් රූප, සම්පූර්ණ වර්ණ සහ සජීවී වර්ණ සමඟ",
+      },
+      ghibli: {
+        title: "ගිබ්ලි ශෛලිය",
+        description:
+          "මැජික් Studio Ghibli ආශ්‍රිත කලාකෘතිය විහිළුකාර ආකර්ෂණය සමඟ",
+      },
+      miniFrames: {
+        title: "කුඩා රාමු",
+        description: "කිසිදු අවකාශයකටම සුදුසු කුඩා සහ සරල කුඩා රාමු",
+      },
     },
     about: {
       title: "ඇයි අපව තෝරන්නේ",
