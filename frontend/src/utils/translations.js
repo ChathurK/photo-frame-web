@@ -178,7 +178,16 @@ export const translations = {
       },
     },
     footer: {
-      copyright: "© 2025 FRAMESLK.COM • Crafted with love 💚",
+      sentence:
+        "Transform your cherished memories into stunning framed artwork. Premium quality, handcrafted with love.",
+      links: "Quick Links",
+      contact: {
+        topic: "Contact Us",
+        whatsapp: "WhatsApp",
+        email: "Email",
+        location: "Location",
+      },
+      copyright: "© 2025 FRAMESLK.COM • Crafted with love 🤍",
     },
   },
   si: {
@@ -359,6 +368,15 @@ export const translations = {
       },
     },
     footer: {
+      sentence:
+        "ඔබේ ප්‍රිය මතකයන් අලංකාර රාමු කළ කලාකෘතියකට පරිවර්තනය කරන්න. ප්‍රිමියම් ගුණාත්මකභාවය, සෙනෙහසින් සාදන ලදී.",
+      links: "ඉක්මන් සබැඳි",
+      contact: {
+        topic: "අප අමතන්න",
+        whatsapp: "WhatsApp",
+        email: "ඊමේල්",
+        location: "ස්ථානය",
+      },
       copyright: "© 2025 FRAMESLK.COM • ආදරයෙන් සාදන ලද 💚",
     },
   },
