@@ -39,6 +39,7 @@ function App() {
           <HeroSection
             language={selectedLanguage}
             translations={translations}
+            onPageChange={handlePageChange}
           />
           <GallerySection
             language={selectedLanguage}

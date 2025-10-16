@@ -30,7 +30,7 @@ const TestimonialsSection = ({ language, translations }) => {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
             </span>
             <span className="text-xs font-semibold text-green-2 md:text-sm">
-              Customer Reviews
+              {lang.testimonials.badge ?? "Customer Reviews"}
             </span>
           </div>
 

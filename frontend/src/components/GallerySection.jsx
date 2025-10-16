@@ -119,7 +119,7 @@ const GallerySection = ({ language, translations }) => {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
             </span>
             <span className="text-xs font-semibold text-green-2 md:text-sm">
-              Featured Collections
+              {lang.gallery?.badge ?? "Featured Collections"}
             </span>
           </div>
           {/* Section Title & Description Text */}
@@ -169,10 +169,10 @@ const GallerySection = ({ language, translations }) => {
         {/* CTA Section */}
         <div className="mt-14 rounded-xl bg-gradient-to-r from-green-2/10 to-green-1/10 p-12 text-center">
           <h3 className="mb-4 text-2xl font-bold text-green-3 md:text-3xl">
-            Ready to Create Your Own?
+            {lang.gallery.cta.title ?? "Ready to Create Your Own?"}
           </h3>
           <p className="mb-8 text-base text-gray-600 md:text-lg">
-            Transform your favorite photos into stunning framed artwork
+            {lang.gallery.cta.desc ?? "Transform your favorite photos into stunning framed artwork"}
           </p>
           <button
             onClick={() =>
@@ -182,7 +182,7 @@ const GallerySection = ({ language, translations }) => {
             }
             className="group relative overflow-hidden rounded-lg bg-green-2 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-1 hover:shadow-xl"
           >
-            <span className="relative z-10">Start Your Order</span>
+            <span className="relative z-10">{lang.gallery.cta.btn ?? "Start Your Order"}</span>
             <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-1 to-green-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
           </button>
         </div>

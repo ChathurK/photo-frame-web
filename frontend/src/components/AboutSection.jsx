@@ -43,7 +43,7 @@ const AboutSection = ({ language, translations }) => {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
             </span>
             <span className="text-xs font-semibold text-green-2 md:text-sm">
-              Why Choose Us
+              {lang.about.badge ?? "Our Specialty"}
             </span>
           </div>
 
@@ -99,15 +99,15 @@ const AboutSection = ({ language, translations }) => {
         <div className="mt-14 grid gap-8 rounded-xl bg-gradient-to-br from-green-2/5 to-green-1/5 p-8 md:grid-cols-3">
           <div className="text-center">
             <div className="mb-2 text-4xl font-bold text-green-3">500+</div>
-            <div className="text-gray-600">Happy Customers</div>
+            <div className="text-gray-600">{lang.about.stat1 ?? "Happy Customers"}</div>
           </div>
           <div className="text-center">
             <div className="mb-2 text-4xl font-bold text-green-3">1000+</div>
-            <div className="text-gray-600">Frames Created</div>
+            <div className="text-gray-600">{lang.about.stat2 ?? "Frames Created"}</div>
           </div>
           <div className="text-center">
             <div className="mb-2 text-4xl font-bold text-green-3">100%</div>
-            <div className="text-gray-600">Customer Satisfaction</div>
+            <div className="text-gray-600">{lang.about.stat3 ?? "Customer Satisfaction"}</div>
           </div>
         </div>
       </div>

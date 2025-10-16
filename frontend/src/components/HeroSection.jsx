@@ -16,7 +16,7 @@ import heroImageDT_85 from "../assets/heroSectionImgs/DT 85.jpg";
 import heroImage12 from "../assets/heroSectionImgs/12.jpg";
 import { useEffect, useState } from "react";
 
-const HeroSection = ({ language, translations }) => {
+const HeroSection = ({ language, translations, onPageChange }) => {
   const lang = translations[language];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -30,9 +30,16 @@ const HeroSection = ({ language, translations }) => {
     return () => clearInterval(interval);
   }, [showcaseImages.length]);
 
-  const handleOrderClick = () => {
+  const handleOrderClick = (e) => {
+    e.preventDefault();
     // Scroll to order section
     document.getElementById("order")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleOrderPageRedirect = () => {
+    if (onPageChange) {
+      onPageChange("order");
+    }
   };
 
   return (
@@ -48,7 +55,7 @@ const HeroSection = ({ language, translations }) => {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-2 opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
                 </span>
-                {lang.hero.badge1 || "Premium Quality Frames"}
+                {lang.hero.badge1 ?? "Premium Quality Frames"}
               </div>
 
               <div className="inline-flex w-fit items-center gap-2 rounded-full bg-amber-500/10 px-4 py-2 text-xs font-medium text-amber-500 md:text-sm">
@@ -56,7 +63,7 @@ const HeroSection = ({ language, translations }) => {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>
                 </span>
-                {lang.hero.badge2 || "Free Delivery"}
+                {lang.hero.badge2 ?? "Free Delivery"}
               </div>
             </div>
 
@@ -73,7 +80,7 @@ const HeroSection = ({ language, translations }) => {
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <button
-                onClick={handleOrderClick}
+                onClick={handleOrderPageRedirect}
                 className="group relative overflow-hidden rounded-lg bg-green-2 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-1 hover:shadow-xl"
               >
                 <span className="relative z-10">{lang.hero.cta}</span>
@@ -81,10 +88,11 @@ const HeroSection = ({ language, translations }) => {
               </button>
 
               <a
-                href="#works"
+                href="#order"
+                onClick={(e)=>handleOrderClick(e)}
                 className="group flex items-center justify-center gap-2 px-8 py-4 font-semibold text-green-2 transition-all duration-300 hover:gap-3 hover:text-green-1"
               >
-                <span>View Gallery</span>
+                <span>{lang.hero.cta2}</span>
                 <ChevronDoubleRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
             </div>
@@ -93,17 +101,17 @@ const HeroSection = ({ language, translations }) => {
             <div className="flex flex-nowrap text-wrap pt-2 max-sm:justify-around md:gap-8">
               <div>
                 <div className="text-3xl font-bold text-green-3">500+</div>
-                <div className="text-sm text-gray-600">Happy Customers</div>
+                <div className="text-sm text-gray-600">{lang.hero.stat1 ?? "Happy Customers"}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-green-3">1000+</div>
-                <div className="text-sm text-gray-600">Frames Created</div>
+                <div className="text-sm text-gray-600">{lang.hero.stat2 ?? "Frames Created"}</div>
               </div>
               <div>
                 <div className="inline-flex items-center text-3xl font-bold text-green-3">
                   100% {/* <StarIcon className="w-7 h-7 text-green-3" /> */}
                 </div>
-                <div className="text-sm text-gray-600">Recommended</div>
+                <div className="text-sm text-gray-600">{lang.hero.stat3 ?? "Recommended"}</div>
               </div>
             </div>
           </div>
@@ -170,9 +178,9 @@ const HeroSection = ({ language, translations }) => {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-green-3 max-sm:text-xs">
-                    Free Delivery
+                    {lang.hero.floating1Title ?? "Free Delivery"}
                   </div>
-                  <div className="text-xs text-gray-600">Island-wide</div>
+                  <div className="text-xs text-gray-600">{lang.hero.floating1Desc ?? "Island-wide"}</div>
                 </div>
               </div>
             </div>
@@ -184,9 +192,9 @@ const HeroSection = ({ language, translations }) => {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-green-3 max-sm:text-xs">
-                    Custom Design
+                    {lang.hero.floating2Title ?? "Custom Design"}
                   </div>
-                  <div className="text-xs text-gray-600">Made to Order</div>
+                  <div className="text-xs text-gray-600">{lang.hero.floating2Desc ?? "Made to Order"}</div>
                 </div>
               </div>
             </div>

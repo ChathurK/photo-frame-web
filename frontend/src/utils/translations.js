@@ -8,12 +8,23 @@ export const translations = {
       order: "Order Now",
     },
     hero: {
+      badge1: "Premium Quality Frames",
+      badge2: "Free Delivery",
       title: "Turn Your Memories Into Art",
       description:
         "Upload your photo, choose oil painting, Ghibli style, or more. Delivered as a beautiful framed artwork straight to your home.",
       cta: "Order Now",
+      cta2: "Chat with Us",
+      stat1: "Happy Customers",
+      stat2: "Frames Created",
+      stat3: "Recommended",
+      floating1Title: "Free Delivery",
+      floating1Desc: "Island-wide",
+      floating2Title: "Custom Design",
+      floating2Desc: "Made to Order",
     },
     gallery: {
+      badge: "Featured Collections",
       title: "Our Gallery",
       description:
         "Discover our curated collection of premium photo frames and artwork",
@@ -36,8 +47,14 @@ export const translations = {
         title: "Mini Frames",
         description: "Compact and elegant mini frames perfect for any space",
       },
+      cta: {
+        title: "Ready to Create Your Own?",
+        desc: "Transform your favorite photos into stunning framed artwork",
+        btn: "Start Your Order",
+      },
     },
     about: {
+      badge: "Our Specialty",
       title: "Why Choose Us",
       description:
         "We specialize in transforming your cherished photos into artistic masterpieces. Whether you want a timeless oil painting or a whimsical Ghibli-inspired design, our artists ensure each frame tells your story beautifully. Delivered right to your doorstep with care.",
@@ -60,14 +77,20 @@ export const translations = {
           description: "Each piece crafted with care and dedication",
         },
       },
+      stat1: "Happy Customers",
+      stat2: "Frames Created",
+      stat3: "Customer Satisfaction",
     },
     testimonials: {
+      badge: "Customer Reviews",
       title: "Testimonials",
       description: "Hear what our happy customers have to say about their experience",
     },
     order: {
+      badge: "Start Your Order",
       title: "Order Your Master Piece",
       subtitle: "Create your perfect custom frame in just a few steps",
+      rec: "RECOMMENDED",
       orderOnline: "Order Online",
       orderOnlineDesc: "Fill out our simple form with your preferences and place the order directly.",
       orderOnlineFeat1: "Easy step-by-step process",
@@ -199,12 +222,19 @@ export const translations = {
       order: "ඇණවුම් කරන්න",
     },
     hero: {
+      badge1: null,
+      badge2: null,
       title: "ඔබේ මතකයන් කලාවට පරිවර්තනය කරන්න",
       description:
         "ඔබේ ඡායාරූපය උඩුගත කරන්න, තෙල් සිතුවම, ගිබ්ලි ශෛලිය හෝ තවත් ඒවා තෝරන්න. ලස්සන රාමු කළ කලාකෘතියක් ලෙස සෘජුවම ඔබේ නිවසට ගෙන දෙනු ලැබේ.",
       cta: "ඇණවුමක් ගබඩා කරන්න",
+      cta2: "අප සමඟ කතා කරන්න",
+      stat1: null,
+      stat2: null,
+      stat3: null,
     },
     gallery: {
+      badge: null,
       title: "අපේ ගැලරිය",
       description:
         "විවිධ ශෛලී සහ තේමාවල පුරා අද්විතීය නිර්මාණ 100 කට වැඩි අපගේ පුළුල් ගැලරියෙන් කිහිපයක්",
@@ -227,8 +257,14 @@ export const translations = {
         title: "කුඩා රාමු",
         description: "කිසිදු අවකාශයකටම සුදුසු කුඩා සහ සරල කුඩා රාමු",
       },
+      cta: {
+        title: "ඔබේම නිර්මාණය කිරීමට සූදානම්ද?",
+        desc: "ඔබේ ප්‍රියතම ඡායාරූප විශ්මයජනක රාමු කළ කලා කෘති බවට පරිවර්තනය කරන්න",
+        btn: "ඔබේ ඇණවුම ආරම්භ කරන්න",
+      },
     },
     about: {
+      badge: null,
       title: "ඇයි අපව තෝරන්නේ",
       description:
         "අපි ඔබේ ප්‍රිය ඡායාරූප කලාත්මක걸작로 පරිවර්තනය කිරීමේ විශේෂඥයින්. ඔබට කාලානුරූප තෙල් සිතුවමක් හෝ විහිළුකාර ගිබ්ලි-ආනුභාව සැලසුමක් අවශ්‍ය වුවද, අපේ කලාකරුවන් සෑම රාමුවක්ම ඔබේ කතාව ලස්සනින් කියන බව සහතික කරයි. සෙනෙහසින් යුතුව ඔබේ දොරටුවට ගෙන දෙනු ලැබේ.",
@@ -251,14 +287,20 @@ export const translations = {
           description: "සෑම කෘතියක්ම සෙනෙහසින් සහ කැපවීමෙන් සාදන ලදී",
         },
       },
+      stat1: null,
+      stat2: null,
+      stat3: null,
     },
     testimonials: {
+      badge: null,
       title: "සාක්ෂි",
       description: "අපගේ සතුටු පාරිභෝගිකයන් ඔවුන්ගේ අත්දැකීම් පිළිබඳව කියන දේ අසා බලන්න",
     },
     order: {
+      badge: null,
       title: "ඔබේ රාමුව ඇණවුම් කරන්න",
       subtitle: "පියවර කිහිපයකින් ඔබේ පරිපූර්ණ අභිරුචි රාමුව සාදන්න",
+      rec: null,
       orderOnline: "අන්තර්ජාලයෙන් ඇණවුම් කරන්න",
       orderOnlineDesc: "ඔබගේ මනාපයන් සමඟ අපගේ සරල පෝරමය පුරවා කෙලින්ම ඇණවුම ලබා දෙන්න.",
       orderOnlineFeat1: "පහසු පියවරෙන් පියවර ක්‍රියාවලිය",

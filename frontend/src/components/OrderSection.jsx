@@ -33,7 +33,7 @@ const OrderSection = ({ language, translations, onPageChange }) => {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
             </span>
             <span className="text-xs font-semibold text-green-2 md:text-sm">
-              Start Your Order
+              {lang.order.badge ?? "Start Your Order"}
             </span>
           </div>
 
@@ -52,7 +52,7 @@ const OrderSection = ({ language, translations, onPageChange }) => {
             {/* Recommended Badge */}
             <div className="absolute right-6 top-6">
               <div className="rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-white">
-                RECOMMENDED
+                {lang.order.rec ?? "RECOMMENDED"}
               </div>
             </div>
 
