@@ -21,7 +21,7 @@ import mini3 from "../assets/gallerySectionImgs/Top Mini frames/11.jpg";
 
 const GallerySection = ({ language, translations }) => {
   const lang = translations[language];
-  const [hoveredCard, setHoveredCard] = useState("designs-0"); // Default to first card expanded
+  const [hoveredCard, setHoveredCard] = useState("oil-0"); // Default to first card expanded
 
   const collections = [
     {
@@ -53,17 +53,15 @@ const GallerySection = ({ language, translations }) => {
   // Desktop Expandable Card Component
   const ExpandableCard = ({ collection, index }) => {
     const isHovered = hoveredCard === `${collection.id}-${index}`;
-    // console.log(`${isHovered} = ${hoveredCard} === ${collection.id}-${index}`); // Debug log
-    // console.log(hoveredCard); // Debug log
+    console.log(`${isHovered} = ${hoveredCard} === ${collection.id}-${index}`); // Debug log
+    console.log(hoveredCard); // Debug log
     return (
       <div
-        style={{
-          flexGrow: isHovered ? 4 : 1,
-          flexShrink: 1,
-          flexBasis: 0,
-          transition: "flex-grow 0.6s ease",
-        }}
         className="group relative h-[500px] cursor-pointer overflow-hidden rounded-xl"
+        style={{
+          flex: isHovered ? '4 1 0%' : '1 1 0%',
+          transition: '0.6s',
+        }}
         onMouseEnter={() => setHoveredCard(`${collection.id}-${index}`)}
         // onMouseLeave={() => setHoveredCard(null)} -> No onMouseLeave - card stays expanded
       >
@@ -71,14 +69,19 @@ const GallerySection = ({ language, translations }) => {
         <img
           src={collection.images[index]}
           alt={`${collection.name} ${index + 1}`}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-600"
+          style={{
+            scale: isHovered? .9:1
+          }}
         />
 
         {/* Gradient Overlay */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-500 ${
-            isHovered ? "opacity-30" : "opacity-80"
-          }`}
+          className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"
+          style={{
+            opacity: isHovered ? 0 : 1,
+            transition: 'opacity 0.6s ease-in-out',
+          }}
         ></div>
       </div>
     );
@@ -182,7 +185,9 @@ const GallerySection = ({ language, translations }) => {
             }
             className="group relative overflow-hidden rounded-lg bg-green-2 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-1 hover:shadow-xl"
           >
-            <span className="relative z-10">{lang.gallery.cta.btn ?? "Start Your Order"}</span>
+            <span className="relative z-10">
+              {lang.gallery.cta.btn ?? "Start Your Order"}
+            </span>
             <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-1 to-green-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
           </button>
         </div>
