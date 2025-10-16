@@ -2,7 +2,6 @@ import { useState } from "react";
 import LanguageSelector from "./components/LanguageSelector";
 import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
-import WorksSection from "./components/WorksSection";
 import GallerySection from "./components/GallerySection";
 import AboutSection from "./components/AboutSection";
 import TestimonialsSection from "./components/TestimonialsSection";
@@ -12,6 +11,7 @@ import Footer from "./components/Footer";
 import { translations } from "./utils/translations";
 import "./App.css";
 import ScreenSizeIndicator from "./components/ScreenSizeIndicator";
+import ScrollerToTopBtn from "./components/hooks/ScrollerToTopBtn";
 
 function App() {
   const [selectedLanguage, setSelectedLanguage] = useState("en");
@@ -58,6 +58,7 @@ function App() {
             onPageChange={handlePageChange}
           />
           <Footer language={selectedLanguage} translations={translations} />
+          <ScrollerToTopBtn />
         </div>
       ) : (
         <OrderPage
