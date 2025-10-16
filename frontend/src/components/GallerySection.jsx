@@ -56,8 +56,8 @@ const GallerySection = ({ language, translations }) => {
   // Desktop Expandable Card Component
   const ExpandableCard = ({ collection, index }) => {
     const isHovered = hoveredCard === `${collection.id}-${index}`;
-    console.log(`${isHovered} = ${hoveredCard} === ${collection.id}-${index}`); // Debug log
-    console.log(hoveredCard); // Debug log
+    // console.log(`${isHovered} = ${hoveredCard} === ${collection.id}-${index}`); // Debug log
+    // console.log(hoveredCard); // Debug log
     return (
       <div
         style={{
@@ -159,7 +159,7 @@ const GallerySection = ({ language, translations }) => {
   };
 
   return (
-    <section className="pb-12 pt-4 max-sm:pt-10">
+    <section id="gallery" className="pb-12 pt-4 max-sm:pt-10">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-12 text-center">

@@ -1,7 +1,8 @@
 export const translations = {
   en: {
     nav: {
-      works: "Our Works",
+      gallery: "Our Gallery",
+      about: "Why Us",
       testimonials: "Testimonials",
       promo: "Promo",
       order: "Order Now",
@@ -182,10 +183,11 @@ export const translations = {
   },
   si: {
     nav: {
-      works: "අපේ වැඩ",
+      gallery: "ගැලරිය",
+      about: "ඇයි අපව තෝරන්නේ",
       testimonials: "සාක්ෂි",
       promo: "ප්‍රචාරණය",
-      order: "ඇණවුම්",
+      order: "ඇණවුම් කරන්න",
     },
     hero: {
       title: "ඔබේ මතකයන් කලාවට පරිවර්තනය කරන්න",

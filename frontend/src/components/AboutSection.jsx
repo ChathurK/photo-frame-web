@@ -32,7 +32,7 @@ const AboutSection = ({ language, translations }) => {
   ];
 
   return (
-    <section className="relative overflow-hidden pb-12 pt-4">
+    <section id="about" className="relative overflow-hidden pb-12 pt-4">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-14 text-center">
@@ -60,7 +60,7 @@ const AboutSection = ({ language, translations }) => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl"
             >
               {/* Gradient overlay on hover */}
               <div

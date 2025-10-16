@@ -8,7 +8,8 @@ const Header = ({ language, translations, onPageChange }) => {
   const lang = translations[language];
 
   const menuItems = [
-    { href: "#works", label: lang.nav.works },
+    { href: "#gallery", label: lang.nav.gallery },
+    { href: "#about", label: lang.nav.about },
     { href: "#testimonials", label: lang.nav.testimonials },
     { href: "#video", label: lang.nav.promo },
   ];
@@ -29,6 +30,14 @@ const Header = ({ language, translations, onPageChange }) => {
   const handleMenuItemClick = () => {
     setIsMobileMenuOpen(false);
     setIsClosing(false);
+  };
+
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const element = document.querySelector(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
@@ -62,25 +71,35 @@ const Header = ({ language, translations, onPageChange }) => {
       {/* Desktop navigation */}
       <nav aria-label="navigation list" className="mr-7 hidden gap-8 md:flex">
         <a
-          href="#works"
+          href="#gallery"
           className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
+          onClick={(e) => handleSmoothScroll(e, "#gallery")}
         >
-          {lang.nav.works}
+          {lang.nav.gallery}
+        </a>
+        <a
+          href="#about"
+          className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
+          onClick={(e) => handleSmoothScroll(e, "#about")}
+        >
+          {lang.nav.about}
         </a>
         <a
           href="#testimonials"
           className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
+          onClick={(e) => handleSmoothScroll(e, "#testimonials")}
         >
           {lang.nav.testimonials}
         </a>
         <a
           href="#video"
           className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
+          onClick={(e) => handleSmoothScroll(e, "#video")}
         >
           {lang.nav.promo}
         </a>
         <button
-          className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
+          className="whitespace-nowrap px-3 py-1 font-medium text-white bg-green-2 rounded-full transition-colors duration-300 hover:bg-green-1"
           onClick={() => onPageChange && onPageChange("order")}
         >
           {lang.nav.order}
@@ -104,7 +123,10 @@ const Header = ({ language, translations, onPageChange }) => {
                     : `${index * 100}ms`,
                   animationFillMode: "both",
                 }}
-                onClick={handleMenuItemClick}
+                onClick={(e) => {
+                  handleSmoothScroll(e, item.href);
+                  handleMenuItemClick();
+                }}
               >
                 {item.label}
               </a>
