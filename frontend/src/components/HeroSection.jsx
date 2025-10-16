@@ -113,10 +113,11 @@ const HeroSection = ({ language, translations }) => {
             {/* Main Image with Gradient Border */}
             <div className="relative">
               {/* Gradient background */}
-              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-green-2 via-green-1 to-green-3 opacity-20 blur-2xl"></div>
+              <div className="absolute -inset-4 rounded-xl bg-green-2 opacity-20 blur-2xl"></div>
 
               {/* Main Image Container */}
-              <div className="relative overflow-hidden rounded-xl shadow-2xl">
+              {/* <div className="relative overflow-hidden rounded-xl shadow-[0px_0px_100px_rgba(34,197,94,0.3)]"> */}
+              <div className="relative overflow-hidden rounded-xl">
                 {showcaseImages.map((image, index) => (
                   <img
                     key={index}
@@ -131,17 +132,17 @@ const HeroSection = ({ language, translations }) => {
                 ))}
 
                 {/* Image Overlay with gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div> */}
 
                 {/* Floating Badge */}
-                <div className="absolute bottom-5 right-5 hidden rounded-lg bg-white/50 px-4 py-2 shadow-lg backdrop-blur-sm">
+                {/* <div className="absolute bottom-5 right-5 rounded-lg bg-white/50 px-4 py-2 shadow-lg backdrop-blur-sm">
                   <div className="text-sm font-medium text-green-3">
                     Premium Quality
                   </div>
                   <div className="text-xs text-gray-600">
                     Handcrafted Frames
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Image Navigation Dots */}

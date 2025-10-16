@@ -48,7 +48,7 @@ const OrderSection = ({ language, translations, onPageChange }) => {
         {/* Order Options */}
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
           {/* Online Order Card - PRIMARY */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-2 to-green-1 p-6 shadow-2xl transition-all duration-300 hover:shadow-[0_20px_60px_rgba(34,197,94,0.3)]">
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-2 to-green-1 p-6 transition-all duration-300 hover:shadow-[0px_0px_100px_rgba(34,197,94,0.3)]">
             {/* Recommended Badge */}
             <div className="absolute right-6 top-6">
               <div className="rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-white">

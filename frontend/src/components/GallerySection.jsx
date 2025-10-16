@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
 
 // Import gallery images
 import design1 from "../assets/gallerySectionImgs/Top 100 designs/DT 65.jpg";
@@ -91,66 +88,18 @@ const GallerySection = ({ language, translations }) => {
   const MobileCarousel = ({ collection }) => {
     return (
       <Swiper
-        effect={"coverflow"}
-        grabCursor={true}
-        centeredSlides={true}
+        spaceBetween={16}
         slidesPerView={"auto"}
-        coverflowEffect={{
-          rotate: 0,
-          stretch: 0,
-          depth: 100,
-          modifier: 2.5,
-          slideShadows: true,
-        }}
-        pagination={{
-          clickable: true,
-          dynamicBullets: true,
-        }}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
-        className="mySwiper pb-12"
       >
         {collection.images.map((image, index) => (
           <SwiperSlide key={index} className="!w-[280px]">
-            <div className="relative h-[400px] overflow-hidden rounded-2xl shadow-2xl">
+            <div className="relative h-[400px] overflow-hidden rounded-xl">
               {/* Image */}
               <img
                 src={image}
                 alt={`${collection.name} ${index + 1}`}
-                className="h-full w-full object-cover"
+                className="size-full scale-[100%] object-cover"
               />
-
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <div className="mb-2 w-fit rounded-full bg-white/20 px-3 py-1 backdrop-blur-sm">
-                  <span className="text-xs font-semibold text-white">
-                    {index === 0
-                      ? "Popular"
-                      : index === 1
-                        ? "Trending"
-                        : "Featured"}
-                  </span>
-                </div>
-                <h4 className="mb-2 text-xl font-bold text-white">
-                  {collection.name}
-                </h4>
-                <p className="text-sm text-gray-200">Design {index + 1}</p>
-              </div>
-
-              {/* Number */}
-              <div className="absolute right-4 top-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                  <span className="text-lg font-bold text-white">
-                    {index + 1}
-                  </span>
-                </div>
-              </div>
             </div>
           </SwiperSlide>
         ))}
