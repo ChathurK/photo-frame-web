@@ -48,7 +48,7 @@ const OrderSection = ({ language, translations, onPageChange }) => {
         {/* Order Options */}
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
           {/* Online Order Card - PRIMARY */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-2 to-green-1 p-6 shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(34,197,94,0.3)]">
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-2 to-green-1 p-6 shadow-2xl transition-all duration-300 hover:shadow-[0_20px_60px_rgba(34,197,94,0.3)]">
             {/* Recommended Badge */}
             <div className="absolute right-6 top-6">
               <div className="rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-white">
@@ -70,19 +70,18 @@ const OrderSection = ({ language, translations, onPageChange }) => {
 
               {/* Description */}
               <p className="mb-3 text-sm leading-relaxed text-white/90">
-                Fill out our simple form with your preferences and place the
-                order.
+                {lang.order?.orderOnlineDesc}
               </p>
 
               {/* Features */}
               <ul className="mb-6 space-y-3 text-sm text-white">
                 <li className="flex items-center gap-2">
                   <CheckCircleIcon className="h-5 w-5 text-white" />
-                  <span>Easy step-by-step process</span>
+                  <span>{lang.order?.orderOnlineFeat1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircleIcon className="h-5 w-5 text-white" />
-                  <span>Instant order confirmation</span>
+                  <span>{lang.order?.orderOnlineFeat2}</span>
                 </li>
               </ul>
 
@@ -100,7 +99,7 @@ const OrderSection = ({ language, translations, onPageChange }) => {
           </div>
 
           {/* WhatsApp Order Card - SECONDARY */}
-          <div className="group relative overflow-hidden rounded-xl bg-white p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xl bg-white p-6 transition-all duration-300 hover:shadow-xl">
             {/* Gradient overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-1 to-green-3 opacity-0 transition-opacity duration-300 group-hover:opacity-5"></div>
 
@@ -118,19 +117,18 @@ const OrderSection = ({ language, translations, onPageChange }) => {
 
               {/* Description */}
               <p className="mb-3 text-sm leading-relaxed text-gray-600">
-                Prefer a personal touch? Chat directly with us on WhatsApp.
-                Share your ideas.
+                {lang.order?.orderWhatsappDesc}
               </p>
 
               {/* Features */}
               <ul className="mb-6 space-y-3 text-sm text-gray-600">
                 <li className="flex items-center gap-2">
                   <SparklesIcon className="h-5 w-5 text-green-1" />
-                  <span>Direct communication</span>
+                  <span>{lang.order?.orderWhatsappFeat1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <SparklesIcon className="h-5 w-5 text-green-1" />
-                  <span>Personalized assistance</span>
+                  <span>{lang.order?.orderWhatsappFeat2}</span>
                 </li>
               </ul>
 
