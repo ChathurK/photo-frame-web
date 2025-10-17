@@ -21,7 +21,6 @@ import mini3 from "../assets/gallerySectionImgs/Top Mini frames/11.jpg";
 
 const GallerySection = ({ language, translations }) => {
   const lang = translations[language];
-  const [hoveredCard, setHoveredCard] = useState("oil-0"); // Default to first card expanded
 
   const collections = [
     {
@@ -52,37 +51,13 @@ const GallerySection = ({ language, translations }) => {
 
   // Desktop Expandable Card Component
   const ExpandableCard = ({ collection, index }) => {
-    const isHovered = hoveredCard === `${collection.id}-${index}`;
-    console.log(`${isHovered} = ${hoveredCard} === ${collection.id}-${index}`); // Debug log
-    console.log(hoveredCard); // Debug log
     return (
-      <div
-        className="group relative h-[500px] cursor-pointer overflow-hidden rounded-xl"
-        style={{
-          flex: isHovered ? '4 1 0%' : '1 1 0%',
-          transition: '0.6s',
-        }}
-        onMouseEnter={() => setHoveredCard(`${collection.id}-${index}`)}
-        // onMouseLeave={() => setHoveredCard(null)} -> No onMouseLeave - card stays expanded
-      >
-        {/* Background Image */}
+      <div className="relative h-[500px] flex-1 cursor-pointer overflow-hidden rounded-xl duration-[600ms] ease-in-out hover:flex-[3]">
         <img
           src={collection.images[index]}
           alt={`${collection.name} ${index + 1}`}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-600"
-          style={{
-            scale: isHovered? .9:1
-          }}
+          className={`block size-full overflow-hidden object-cover`}
         />
-
-        {/* Gradient Overlay */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"
-          style={{
-            opacity: isHovered ? 0 : 1,
-            transition: 'opacity 0.6s ease-in-out',
-          }}
-        ></div>
       </div>
     );
   };
