@@ -52,7 +52,7 @@ const GallerySection = ({ language, translations }) => {
   // Desktop Expandable Card Component
   const ExpandableCard = ({ collection, index }) => {
     return (
-      <div className="relative h-[500px] flex-1 cursor-pointer overflow-hidden rounded-xl duration-[600ms] ease-in-out hover:flex-[3]">
+      <div className="relative h-[500px] flex-1 cursor-pointer overflow-hidden rounded-xl duration-[600ms] ease-in-out hover:flex-[2]">
         <img
           src={collection.images[index]}
           alt={`${collection.name} ${index + 1}`}
@@ -114,7 +114,7 @@ const GallerySection = ({ language, translations }) => {
           {collections.map((collection) => (
             <div key={collection.id} className="space-y-8">
               {/* Collection Header */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 <div>
                   <h3 className="mb-2 text-2xl font-bold text-green-3 md:text-3xl">
                     {collection.name}

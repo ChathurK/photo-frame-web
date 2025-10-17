@@ -41,11 +41,11 @@ const Header = ({ language, translations, onPageChange }) => {
   };
 
   return (
-    <header className="flex items-center justify-between py-2">
-      <div className="flex w-full items-center justify-between">
+    <header className="container mx-auto flex items-center justify-between px-4 py-2">
+      <div className="flex h-[50px] w-full items-center justify-between">
         <button
           onClick={() => onPageChange && onPageChange("home")}
-          className="cursor-pointer"
+          className="-ml-6 cursor-pointer md:-ml-8"
         >
           <img
             src={logo}
@@ -57,7 +57,7 @@ const Header = ({ language, translations, onPageChange }) => {
         {/* Mobile menu button */}
         <button
           aria-label="toggle menu"
-          className="mr-7 rounded-full p-1 transition-colors duration-300 hover:bg-slate-500 hover:bg-opacity-20 md:hidden"
+          className="rounded-full p-1 transition-colors duration-300 active:bg-slate-300 md:hidden"
           onClick={handleMenuToggle}
         >
           {!isMobileMenuOpen ? (
@@ -69,7 +69,10 @@ const Header = ({ language, translations, onPageChange }) => {
       </div>
 
       {/* Desktop navigation */}
-      <nav aria-label="navigation list" className="mr-7 hidden gap-8 md:flex">
+      <nav
+        aria-label="navigation list"
+        className="hidden gap-4 md:flex lg:gap-8"
+      >
         <a
           href="#gallery"
           className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
@@ -99,7 +102,7 @@ const Header = ({ language, translations, onPageChange }) => {
           {lang.nav.promo}
         </a>
         <button
-          className="whitespace-nowrap px-3 py-1 font-medium text-white bg-green-2 rounded-full transition-colors duration-300 hover:bg-green-1"
+          className="whitespace-nowrap rounded-full bg-green-2 px-3 py-1 font-medium text-white transition-colors duration-300 hover:bg-green-1"
           onClick={() => onPageChange && onPageChange("order")}
         >
           {lang.nav.order}

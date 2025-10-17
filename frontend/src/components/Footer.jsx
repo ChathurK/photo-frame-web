@@ -5,7 +5,7 @@ import {
 } from "@heroicons/react/24/outline";
 import logoWhite from "../assets/logo/FRAMESLK.COM_NEW_LOGO_WHITE.png";
 
-const Footer = ({ language, translations }) => {
+const Footer = ({ language, translations, currentPage }) => {
   const lang = translations[language];
 
   const socialLinks = [
@@ -74,8 +74,17 @@ const Footer = ({ language, translations }) => {
     }
   };
 
+  if (currentPage != "home" && currentPage) {
+    return null;
+  }
+
   return (
-    <footer className="text-white" style={{background: 'linear-gradient(180deg, #05b777ff -100%, #11422eff 40%)'}}>
+    <footer
+      className="justify-center text-white"
+      style={{
+        background: "linear-gradient(180deg, #05b777ff -100%, #11422eff 40%)",
+      }}
+    >
       <div className="container mx-auto px-4 py-12">
         {/* Main Footer Content */}
         <div className="grid gap-8 md:grid-cols-3 md:justify-items-center">
@@ -84,9 +93,9 @@ const Footer = ({ language, translations }) => {
             <img
               src={logoWhite}
               alt="FramesLK Logo"
-              className="mb-4 scale-[1.35] h-12 w-auto"
+              className="mb-4 h-12 w-auto scale-[1.35]"
             />
-            <p className=" mb-4 text-sm leading-relaxed text-white/80">
+            <p className="mb-4 text-sm leading-relaxed text-white/80">
               {lang.footer?.sentence}
             </p>
             {/* Social Media Links */}
@@ -97,7 +106,7 @@ const Footer = ({ language, translations }) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white transition-all duration-300 hover:bg-white/20 hover:scale-110"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white transition-all duration-300 hover:scale-110 hover:bg-white/20"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -113,7 +122,10 @@ const Footer = ({ language, translations }) => {
             </h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
-                <li key={link.name} onClick={(e) => handleSmoothScroll(e, link.href)}>
+                <li
+                  key={link.name}
+                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                >
                   <a
                     href={link.href}
                     className="text-sm text-white/80 transition-colors duration-300 hover:text-white"
@@ -135,9 +147,7 @@ const Footer = ({ language, translations }) => {
                 <li key={index} className="flex items-start gap-3">
                   <contact.icon className="mt-1 size-5 flex-shrink-0 text-white/60" />
                   <div>
-                    <div className="text-xs text-white/60">
-                      {contact.label}
-                    </div>
+                    <div className="text-xs text-white/60">{contact.label}</div>
                     {contact.link ? (
                       <a
                         href={contact.link}

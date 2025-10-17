@@ -43,7 +43,7 @@ const HeroSection = ({ language, translations, onPageChange }) => {
   };
 
   return (
-    <section className="relative overflow-visible pb-12 pt-4 md:pb-20 md:pt-4">
+    <section className="relative overflow-visible pb-12 pt-2 md:pb-20 md:pt-4">
       <div className="container mx-auto animate-slideInBottom px-4">
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
           {/* Left Content */}
