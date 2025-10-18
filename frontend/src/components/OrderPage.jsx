@@ -90,11 +90,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     
     const lang = language === 'si' ? 'sinhala' : 'english';
     const frameName = frameTypeName.toLowerCase();
-    // For fiber frames, use the selected color. For others, extract color from frame type name
+    // Use the selected color parameter (for both Fiber and Plymount frames with color selection)
     const colorName = frameColorName?.toLowerCase() || '';
     
     try {
-      // Fiber Frame - Only type that has separate color selection
+      // Fiber Frame - Has 4 colors (Black, White, Brown, Pinewood)
       if (frameName.includes('fiber')) {
         // Fiber frames REQUIRE color selection
         if (!colorName) return null; // Don't show preview until color is selected
@@ -122,79 +122,125 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         }
       }
       
-      // For non-Fiber frames, detect color from the frame type name itself
-      // Plymount Nonmargine Normal - Black or White
-      // Variations: "nonmargine", "non-margine", "non margine", "without margine"
+      // Plymount Nonmargine Normal - Black or White (now with color selection)
       if ((frameName.includes('nonmargine') || frameName.includes('non-margine') || 
            frameName.includes('non margine') || frameName.includes('without margine')) && 
           !frameName.includes('box')) {
-        let fileName = '';
         const suffix = lang === 'sinhala' ? 'sin' : 'eng';
         
-        // Check if frame name contains color
-        if (frameName.includes('black')) {
-          fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
-        } else if (frameName.includes('white')) {
-          fileName = `Plymount Nonmargine Normal -White - ${suffix}.jpg`;
+        // Use color parameter if provided (new behavior), otherwise extract from name (backward compat)
+        let fileName = '';
+        if (colorName) {
+          // Color selected via dropdown (Plymount frames now have color selection)
+          if (colorName.includes('black')) {
+            fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+          } else if (colorName.includes('white')) {
+            fileName = `Plymount Nonmargine Normal -White - ${suffix}.jpg`;
+          }
         } else {
-          // Default to black if no color specified
-          fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+          // Fallback: check frame name for color (old frames with color in name)
+          if (frameName.includes('black')) {
+            fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+          } else if (frameName.includes('white')) {
+            fileName = `Plymount Nonmargine Normal -White - ${suffix}.jpg`;
+          } else {
+            // Default to black if no color specified
+            fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+          }
         }
-        return new URL(`../assets/frames/Plymount Nonmargine Normal/${fileName}`, import.meta.url).href;
+        if (fileName) {
+          return new URL(`../assets/frames/Plymount Nonmargine Normal/${fileName}`, import.meta.url).href;
+        }
       }
       
-      // Plymount Margine Normal - Black or White
-      // Variations: "margine", "with margine", "margined"
-      // Make sure it's NOT "nonmargine"
+      // Plymount Margine Normal - Black or White (now with color selection)
       if ((frameName.includes('margine') || frameName.includes('margin')) && 
           !frameName.includes('nonmargine') && !frameName.includes('non-margine') && 
           !frameName.includes('box')) {
-        let fileName = '';
         const suffix = lang === 'sinhala' ? 'sin' : 'eng';
         
-        if (frameName.includes('black')) {
-          fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
-        } else if (frameName.includes('white')) {
-          fileName = `Plymount Margine Normal- White - ${suffix}.jpg`;
+        let fileName = '';
+        if (colorName) {
+          // Color selected via dropdown
+          if (colorName.includes('black')) {
+            fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+          } else if (colorName.includes('white')) {
+            fileName = `Plymount Margine Normal- White - ${suffix}.jpg`;
+          }
         } else {
-          // Default to black
-          fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+          // Fallback: extract from name
+          if (frameName.includes('black')) {
+            fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+          } else if (frameName.includes('white')) {
+            fileName = `Plymount Margine Normal- White - ${suffix}.jpg`;
+          } else {
+            // Default to black
+            fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+          }
         }
-        return new URL(`../assets/frames/Plymount Margine Normal/${fileName}`, import.meta.url).href;
+        if (fileName) {
+          return new URL(`../assets/frames/Plymount Margine Normal/${fileName}`, import.meta.url).href;
+        }
       }
       
-      // Plymount Box Frame
+      // Plymount Box Frame - Black or White (now with color selection)
       if (frameName.includes('box')) {
-        let fileName = '';
         const langSuffix = lang === 'sinhala' ? 'sinhala' : 'english';
         
+        let fileName = '';
         if (frameName.includes('plastic') || frameName.includes('beading')) {
           fileName = `Plymount Box Frame With Plastic Beading - ${lang === 'sinhala' ? 'sin' : 'eng'}.jpg`;
-        } else if (frameName.includes('black')) {
-          fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
-        } else if (frameName.includes('white')) {
-          fileName = `Plymount Box Frame Nonmargine -white ${langSuffix}.jpg`;
         } else {
-          // Default to black
-          fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+          // Box Frame Nonmargine - now supports color selection
+          if (colorName) {
+            if (colorName.includes('black')) {
+              fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+            } else if (colorName.includes('white')) {
+              fileName = `Plymount Box Frame Nonmargine -white ${langSuffix}.jpg`;
+            }
+          } else {
+            // Fallback: extract from name
+            if (frameName.includes('black')) {
+              fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+            } else if (frameName.includes('white')) {
+              fileName = `Plymount Box Frame Nonmargine -white ${langSuffix}.jpg`;
+            } else {
+              // Default to black
+              fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+            }
+          }
         }
-        return new URL(`../assets/frames/Plymount Box Frame Nonmargine/${fileName}`, import.meta.url).href;
+        if (fileName) {
+          return new URL(`../assets/frames/Plymount Box Frame Nonmargine/${fileName}`, import.meta.url).href;
+        }
       }
       
-      // Embossed Frames - Black or White
+      // Embossed Frames - Black or White (now with color selection)
       if (frameName.includes('emboss')) {
-        let fileName = '';
         const suffix = lang === 'sinhala' ? 'sin' : 'eng';
         
-        if (frameName.includes('black')) {
-          fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
-        } else if (frameName.includes('white')) {
-          fileName = `Plymount Embossed Plain white - ${suffix}.jpg`;
+        let fileName = '';
+        if (colorName) {
+          // Color selected via dropdown
+          if (colorName.includes('black')) {
+            fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+          } else if (colorName.includes('white')) {
+            fileName = `Plymount Embossed Plain white - ${suffix}.jpg`;
+          }
         } else {
-          // Default to black
-          fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+          // Fallback: extract from name
+          if (frameName.includes('black')) {
+            fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+          } else if (frameName.includes('white')) {
+            fileName = `Plymount Embossed Plain white - ${suffix}.jpg`;
+          } else {
+            // Default to black
+            fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+          }
         }
-        return new URL(`../assets/frames/Embossed Frames/${fileName}`, import.meta.url).href;
+        if (fileName) {
+          return new URL(`../assets/frames/Embossed Frames/${fileName}`, import.meta.url).href;
+        }
       }
       
     } catch (error) {
@@ -257,8 +303,12 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
   const loadFrameTypes = async (categoryId) => {
     try {
+      // For Cute Collection, use 100 Designs frames (category 2)
+      const selectedCategory = categories.find(c => c.id == categoryId);
+      const actualCategoryId = selectedCategory?.code === 'CUTE' ? 2 : categoryId;
+      
       const response = await fetch(
-        `http://localhost:3001/api/frame-types/${categoryId}`,
+        `http://localhost:3001/api/frame-types/${actualCategoryId}`,
       );
       const result = await response.json();
       if (result.success) {
@@ -289,6 +339,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     try {
       const pricesMap = {};
       
+      // Check if current category is Cute Collection
+      const selectedCategory = categories.find(c => c.id == orderData.categoryId);
+      const isCuteCollection = selectedCategory?.code === 'CUTE';
+      
       // Fetch price for each size
       for (const size of sizesData) {
         try {
@@ -297,7 +351,20 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           );
           const result = await response.json();
           if (result.success) {
-            pricesMap[size.id] = result.data;
+            // For Cute Collection, add Rs. 450 to the price
+            if (isCuteCollection) {
+              pricesMap[size.id] = {
+                ...result.data,
+                base_price: result.data.final_price, // Store original as base
+                price_increment: 450,
+                final_price: result.data.final_price + 450,
+                price_lkr: result.data.final_price + 450,
+                cute_collection_charge: 450,
+                category_name: 'Cute Collections'
+              };
+            } else {
+              pricesMap[size.id] = result.data;
+            }
           }
         } catch (error) {
           console.error(`Error loading price for size ${size.id}:`, error);
@@ -408,19 +475,20 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       let totalPrice = 0;
       
       if (priceInfo) {
-        totalPrice = priceInfo.final_price;
+        // For Cute Collection, final_price already includes the +450
+        totalPrice = priceInfo.final_price || priceInfo.price_lkr || 0;
         priceBreakdown += `💰 *Price Breakdown:*\n`;
-        priceBreakdown += `• Base Price: Rs. ${priceInfo.base_price.toLocaleString()}\n`;
         
-        if (priceInfo.price_increment > 0) {
-          priceBreakdown += `• Category Charge: Rs. ${priceInfo.price_increment.toLocaleString()}\n`;
-        }
-        
-        // Cute Collection charge
-        const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
-        if (cuteCollectionCharge > 0) {
-          priceBreakdown += `• Cute Collection: Rs. ${cuteCollectionCharge.toLocaleString()}\n`;
-          totalPrice += cuteCollectionCharge;
+        // Show breakdown differently for Cute Collection
+        if (categoryCode === 'CUTE' && priceInfo.cute_collection_charge) {
+          const basePrice = priceInfo.final_price - 450;
+          priceBreakdown += `• Frame Price: Rs. ${basePrice.toLocaleString()}\n`;
+          priceBreakdown += `• Cute Collection: Rs. 450\n`;
+        } else {
+          priceBreakdown += `• Base Price: Rs. ${(priceInfo.base_price || priceInfo.price_lkr).toLocaleString()}\n`;
+          if (priceInfo.price_increment > 0) {
+            priceBreakdown += `• Category Charge: Rs. ${priceInfo.price_increment.toLocaleString()}\n`;
+          }
         }
         
         // Per-person charge
@@ -749,33 +817,132 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               ) : null;
             })()}
 
-            {/* Frame Type Selection */}
+            {/* Frame Type Selection - Visual Card Selection */}
             <div className="form-group">
-              <label className="block mb-3 font-medium text-green-3">
-                {t.order?.fields?.frameType || "Frame Type"}
-              </label>
-              <select
-                value={orderData.frameTypeId}
-                onChange={(e) =>
-                  handleInputChange("frameTypeId", e.target.value)
-                }
-                className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
-                disabled={!orderData.categoryId}
-              >
-                <option value="">
-                  {t.order?.fields?.chooseFrameType || "Choose frame type..."}
-                </option>
-                {frameTypes.map((frameType) => (
-                  <option key={frameType.id} value={frameType.id}>
-                    {frameType.name} ({frameType.material})
-                  </option>
-                ))}
-              </select>
-              {!orderData.categoryId && (
-                <p className="mt-3 text-sm text-gray-500">
-                  {t.order?.fields?.pleaseSelectCategory ||
-                    "Please select a category first"}
+              <div className="mb-6 text-center">
+                <h3 className="mb-2 text-2xl font-bold text-green-3">
+                  {t.order?.fields?.frameType || "Select Frame Type"}
+                </h3>
+                <p className="text-gray-600">
+                  {!orderData.categoryId 
+                    ? (t.order?.fields?.pleaseSelectCategory || "Please select a category first")
+                    : "Click on a frame to see preview and select"
+                  }
                 </p>
+              </div>
+
+              {orderData.categoryId ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+                  {frameTypes.map((frameType) => {
+                    const isSelected = orderData.frameTypeId == frameType.id;
+                    
+                    return (
+                      <div
+                        key={frameType.id}
+                        onClick={() => handleInputChange("frameTypeId", frameType.id)}
+                        className={`transform cursor-pointer overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-105 ${
+                          isSelected
+                            ? "bg-green-50 shadow-2xl ring-4 ring-green-2"
+                            : "bg-white hover:shadow-xl"
+                        }`}
+                      >
+                        <div className="relative">
+                          {/* Frame Image Preview */}
+                          <div className="relative flex items-center justify-center h-48 overflow-hidden bg-gray-100">
+                            {(() => {
+                              // For Fiber frames, show default image (user will select color after)
+                              const frameImage = frameType.allows_color 
+                                ? getFrameImage(frameType.name, 'Black', language)
+                                : getFrameImage(frameType.name, null, language);
+                              
+                              if (frameImage) {
+                                return (
+                                  <img
+                                    src={frameImage}
+                                    alt={frameType.name}
+                                    className={`w-full h-full object-contain p-2 transition-all duration-300 ${
+                                      isSelected ? "brightness-110 scale-105" : ""
+                                    }`}
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                    }}
+                                  />
+                                );
+                              } else {
+                                // Fallback icon if no image
+                                return (
+                                  <div className="flex flex-col items-center justify-center text-gray-400">
+                                    <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                                    </svg>
+                                    <p className="mt-2 text-sm">Preview</p>
+                                  </div>
+                                );
+                              }
+                            })()}
+                          </div>
+                          
+                          {/* Selected Checkmark */}
+                          {isSelected && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-10">
+                              <div className="p-3 text-white rounded-full shadow-xl animate-pulse bg-green-2">
+                                <svg
+                                  className="w-8 h-8"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Badge */}
+                          <div className="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
+                            Click to Select
+                          </div>
+                        </div>
+                        
+                        {/* Frame Details */}
+                        <div className="p-4 bg-white">
+                          <h4 className="mb-1 text-lg font-semibold text-gray-800">
+                            {frameType.name}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Material: {frameType.material}
+                          </p>
+                          {frameType.allows_color && (
+                            <p className="mt-1 text-xs text-green-600">
+                              ✓ Multiple colors available
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-8 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
+                  <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="mt-4 text-gray-600">
+                    {t.order?.fields?.pleaseSelectCategory || "Please select a category first"}
+                  </p>
+                </div>
+              )}
+
+              {orderData.frameTypeId && (
+                <div className="mt-6 text-center">
+                  <p className="inline-block px-4 py-3 font-medium rounded-lg bg-green-50 text-green-2">
+                    ✓ Selected:{" "}
+                    {frameTypes.find((ft) => ft.id == orderData.frameTypeId)?.name}
+                  </p>
+                </div>
               )}
             </div>
 
@@ -810,7 +977,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               ) : null;
             })()}
 
-            {/* Frame Preview - Show selected frame image based on type, color and language */}
+            {/* Frame Preview with Zoom - Show selected frame with color */}
             {orderData.frameTypeId && (() => {
               const selectedFrameType = frameTypes.find(
                 (ft) => ft.id === parseInt(orderData.frameTypeId)
@@ -819,20 +986,40 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 (c) => c.id === parseInt(orderData.frameColorId)
               );
               
+              // For frames with color options, show preview only after color is selected
+              // For frames without color options, show preview immediately
+              const shouldShowPreview = selectedFrameType?.allows_color 
+                ? orderData.frameColorId 
+                : true;
+              
+              if (!shouldShowPreview) {
+                return (
+                  <div className="form-group">
+                    <div className="p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
+                      <p className="text-gray-600">
+                        👆 {language === 'si' 
+                          ? 'රාමුවේ පෙරදසුන බැලීමට වර්ණයක් තෝරන්න' 
+                          : 'Select a color above to see detailed frame preview'}
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+              
               const frameImage = getFrameImage(
                 selectedFrameType?.name,
                 selectedColor?.name,
                 language
               );
               
-              // Show preview if image is available
+              // Show detailed preview with zoom if image is available
               if (frameImage) {
                 return (
                   <div className="form-group">
-                    <label className="block mb-2 text-sm font-medium text-green-3">
-                      🖼️ Frame Preview
+                    <label className="block mb-3 text-lg font-medium text-center text-green-3">
+                      🖼️ {language === 'si' ? 'රාමු පෙරදසුන' : 'Frame Preview'}
                     </label>
-                    <div className="relative max-w-xs p-3 mx-auto bg-white border-2 rounded-lg shadow-md border-green-2 group">
+                    <div className="relative max-w-md p-4 mx-auto bg-white border-2 rounded-xl shadow-xl border-green-2 group">
                       <div 
                         className="relative cursor-pointer"
                         onClick={() => setFramePreviewModal(frameImage)}
@@ -840,17 +1027,17 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         <img
                           src={frameImage}
                           alt={`${selectedFrameType?.name} ${selectedColor?.name || ''}`}
-                          className="object-contain w-full h-auto transition-transform rounded-md shadow-sm max-h-48 group-hover:scale-105"
+                          className="object-contain w-full h-auto transition-transform rounded-lg shadow-md max-h-64 group-hover:scale-105"
                           onError={(e) => {
                             e.target.style.display = 'none';
                             console.error('Frame image failed to load');
                           }}
                         />
                         {/* Zoom Icon Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center transition-all bg-black bg-opacity-0 rounded-md group-hover:bg-opacity-20">
-                          <div className="p-2 transition-opacity bg-black rounded-full opacity-0 bg-opacity-60 group-hover:opacity-100">
+                        <div className="absolute inset-0 flex items-center justify-center transition-all bg-black bg-opacity-0 rounded-lg group-hover:bg-opacity-20">
+                          <div className="p-3 transition-opacity bg-black rounded-full opacity-0 bg-opacity-70 group-hover:opacity-100">
                             <svg
-                              className="w-6 h-6 text-white"
+                              className="w-8 h-8 text-white"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -865,30 +1052,15 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-2 text-center">
-                        <p className="text-sm font-semibold text-gray-700">
+                      <div className="mt-3 text-center">
+                        <p className="text-base font-semibold text-gray-800">
                           {selectedFrameType?.name}
                           {selectedColor && ` - ${selectedColor.name}`}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {language === 'si' ? 'විශාල කිරීමට ක්ලික් කරන්න' : 'Click to zoom'}
+                        <p className="mt-1 text-sm text-gray-500">
+                          {language === 'si' ? '🔍 විශාල කිරීමට ක්ලික් කරන්න' : '🔍 Click to zoom and see details'}
                         </p>
                       </div>
-                    </div>
-                  </div>
-                );
-              }
-              
-              // Show hint ONLY for Fiber frames (the only type with color selection)
-              if (selectedFrameType?.allows_color && !orderData.frameColorId) {
-                return (
-                  <div className="form-group">
-                    <div className="p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
-                      <p className="text-gray-600">
-                        👆 {language === 'si' 
-                          ? 'රාමුවේ පෙරදසුන බැලීමට වර්ණයක් තෝරන්න' 
-                          : 'Select a color above to see frame preview'}
-                      </p>
                     </div>
                   </div>
                 );
@@ -946,6 +1118,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               {orderData.sizeId && sizePrices[orderData.sizeId] && (() => {
                 const priceInfo = sizePrices[orderData.sizeId];
                 const categoryCode = categories.find(c => c.id === orderData.categoryId)?.code;
+                const isCuteCollection = categoryCode === 'CUTE';
+                
+                // Base price - use final_price which now includes +450 for Cute Collection
+                const basePrice = priceInfo.final_price || priceInfo.price_lkr || 0;
                 
                 // Per-person charge (for Oil and Cute)
                 const needsPersonCharge = categoryCode === 'OIL' || categoryCode === 'CUTE';
@@ -953,13 +1129,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   ? (orderData.numberOfPersons - 1) * 450 
                   : 0;
                 
-                // Cute Collection category charge
-                const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
-                
                 // Premium package charge
                 const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
                 
-                const totalPrice = priceInfo.final_price + personCharge + cuteCollectionCharge + packageCharge;
+                const totalPrice = basePrice + personCharge + packageCharge;
                 
                 return (
                   <div className="p-4 mt-4 border border-green-200 rounded-lg bg-green-50">
@@ -969,7 +1142,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           Selected Size Price
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
-                          {priceInfo.category_name}
+                          {priceInfo.category_name || (isCuteCollection ? 'Cute Collections' : '')}
                         </p>
                       </div>
                       <div className="text-right">
@@ -977,16 +1150,20 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           LKR {totalPrice.toLocaleString()}
                         </p>
                         <div className="mt-1 text-xs text-gray-500">
-                          {priceInfo.price_increment > 0 && (
-                            <p>
-                              Base: LKR {priceInfo.base_price.toLocaleString()} + 
-                              LKR {priceInfo.price_increment.toLocaleString()} (category)
-                            </p>
-                          )}
-                          {cuteCollectionCharge > 0 && (
-                            <p>
-                              + LKR {cuteCollectionCharge.toLocaleString()} (Cute Collection)
-                            </p>
+                          {isCuteCollection ? (
+                            <>
+                              <p>
+                                Frame: LKR {(basePrice - 450).toLocaleString()} + 
+                                LKR 450 (Cute Collection)
+                              </p>
+                            </>
+                          ) : (
+                            priceInfo.price_increment > 0 && (
+                              <p>
+                                Base: LKR {priceInfo.base_price.toLocaleString()} + 
+                                LKR {priceInfo.price_increment.toLocaleString()} (category)
+                              </p>
+                            )
                           )}
                           {personCharge > 0 && (
                             <p>
@@ -1308,6 +1485,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             {orderData.sizeId && sizePrices[orderData.sizeId] && (() => {
               const priceInfo = sizePrices[orderData.sizeId];
               const categoryCode = categories.find(c => c.id === orderData.categoryId)?.code;
+              const isCuteCollection = categoryCode === 'CUTE';
+              
+              // Base price (for Cute Collection, final_price already includes +450)
+              const basePrice = priceInfo.final_price || priceInfo.price_lkr || 0;
               
               // Per-person charge
               const needsPersonCharge = categoryCode === 'OIL' || categoryCode === 'CUTE';
@@ -1315,13 +1496,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 ? (orderData.numberOfPersons - 1) * 450 
                 : 0;
               
-              // Cute Collection charge
-              const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
-              
               // Premium package charge
               const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
               
-              const totalPrice = priceInfo.final_price + personCharge + cuteCollectionCharge + packageCharge;
+              const totalPrice = basePrice + personCharge + packageCharge;
               
               return (
                 <div className="p-6 border-2 rounded-lg bg-green-50 border-green-3">
@@ -1332,12 +1510,18 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         LKR {totalPrice.toLocaleString()}
                       </p>
                       <div className="mt-2 space-y-1 text-xs text-gray-600">
-                        <p>Base: LKR {priceInfo.base_price.toLocaleString()}</p>
-                        {priceInfo.price_increment > 0 && (
-                          <p>Category Charge: + LKR {priceInfo.price_increment.toLocaleString()}</p>
-                        )}
-                        {cuteCollectionCharge > 0 && (
-                          <p>Cute Collection: + LKR {cuteCollectionCharge.toLocaleString()}</p>
+                        {isCuteCollection ? (
+                          <>
+                            <p>Frame: LKR {(basePrice - 450).toLocaleString()}</p>
+                            <p>Cute Collection: + LKR 450</p>
+                          </>
+                        ) : (
+                          <>
+                            <p>Base: LKR {(priceInfo.base_price || basePrice).toLocaleString()}</p>
+                            {priceInfo.price_increment > 0 && (
+                              <p>Category Charge: + LKR {priceInfo.price_increment.toLocaleString()}</p>
+                            )}
+                          </>
                         )}
                         {personCharge > 0 && (
                           <p>Additional Persons: + LKR {personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} × Rs. 450)</p>
