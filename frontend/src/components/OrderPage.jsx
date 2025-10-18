@@ -1019,7 +1019,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     <label className="block mb-3 text-lg font-medium text-center text-green-3">
                       🖼️ {language === 'si' ? 'රාමු පෙරදසුන' : 'Frame Preview'}
                     </label>
-                    <div className="relative max-w-md p-4 mx-auto bg-white border-2 rounded-xl shadow-xl border-green-2 group">
+                    <div className="relative max-w-md p-4 mx-auto bg-white border-2 shadow-xl rounded-xl border-green-2 group">
                       <div 
                         className="relative cursor-pointer"
                         onClick={() => setFramePreviewModal(frameImage)}
