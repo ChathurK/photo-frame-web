@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { databaseService } from "../services/databaseService";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import DesignGallery from "./DesignGallery";
 
 // Import sample images for categories
-import oilPaintSample from "../assets/oil paint collection/4.jpg";
-import ghibliSample from "../assets/Ghibli collection/5.jpg";
-import miniFrameSample from "../assets/mini frames/3.jpg";
-import portraitSample from "../assets/oil paint collection/7.jpg";
-// Additional samples for variety
+import oilPaintSample from "../assets/oil paint collection/4.jpg"; // Oil Painting - keeping as is
+import miniFrameSample from "../assets/mini frames/12.jpg"; // Mini Frames
+import hundredDesignSample from "../assets/100 design collection final/DT 36.jpg"; // 100 Designs
+import cuteCollectionSample from "../assets/Ghibli collection/9.jpg"; // Cute Collection
+// Additional samples for variety (keeping for fallback)
 import ghibliSample2 from "../assets/Ghibli collection/8.jpg";
 import oilPaintSample2 from "../assets/oil paint collection/6.jpg";
+// Package images
+import freePackageImg from "../assets/Boxes/Free Delivery.webp";
+import premiumPackageImg from "../assets/Boxes/Premium Package.webp";
 
 const OrderPage = ({ language, translations, onPageChange }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,13 +25,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     sizeId: "",
     frameColorId: "",
     numberOfPersons: 1,
+    packageType: "free", // free or premium
     customerName: "",
     customerAddress: "",
     customerWhatsapp: "",
     deliveryTo: "",
     deliveryDate: "",
     backgroundColor: "",
-    imageUrl: "",
     notes: "",
   });
 
@@ -35,7 +41,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
   const [sizes, setSizes] = useState([]);
   const [frameColors, setFrameColors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [sizePrices, setSizePrices] = useState({}); // Store prices for each size
+  const [framePreviewModal, setFramePreviewModal] = useState(null); // For frame zoom modal
 
   const t = translations[language];
 
@@ -44,25 +51,24 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     const name = categoryName?.toLowerCase() || "";
 
     // Map based on common category names
+    // Oil Painting - 4.jpg from oil paint collection
     if (name.includes("oil") || name.includes("paint")) return oilPaintSample;
-    if (
-      name.includes("ghibli") ||
-      name.includes("anime") ||
-      name.includes("cartoon")
-    )
-      return ghibliSample;
-    if (
-      name.includes("mini") ||
-      name.includes("small") ||
-      name.includes("compact")
-    )
+    
+    // Mini Frames - 12.jpg from mini frames
+    if (name.includes("mini") || name.includes("small") || name.includes("compact"))
       return miniFrameSample;
-    if (
-      name.includes("portrait") ||
-      name.includes("classic") ||
-      name.includes("traditional")
-    )
-      return portraitSample;
+    
+    // 100 Designs - DT 36.jpg from 100 design collection
+    if (name.includes("100") || name.includes("hundred") || name.includes("design"))
+      return hundredDesignSample;
+    
+    // Cute Collection - 9.jpg from Ghibli collection
+    if (name.includes("cute") || name.includes("ghibli") || name.includes("anime") || name.includes("cartoon"))
+      return cuteCollectionSample;
+    
+    // Additional fallbacks
+    if (name.includes("portrait") || name.includes("classic") || name.includes("traditional"))
+      return oilPaintSample;
     if (name.includes("wedding") || name.includes("special"))
       return ghibliSample2;
     if (name.includes("family") || name.includes("group"))
@@ -71,19 +77,138 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     // Fallback based on category ID for consistent assignment
     const samples = [
       oilPaintSample,
-      ghibliSample,
       miniFrameSample,
-      portraitSample,
+      hundredDesignSample,
+      cuteCollectionSample,
     ];
     return samples[categoryId % samples.length] || oilPaintSample;
   };
 
+  // Helper function to get frame image based on frame type, color, and language
+  const getFrameImage = (frameTypeName, frameColorName, language) => {
+    if (!frameTypeName) return null;
+    
+    const lang = language === 'si' ? 'sinhala' : 'english';
+    const frameName = frameTypeName.toLowerCase();
+    // For fiber frames, use the selected color. For others, extract color from frame type name
+    const colorName = frameColorName?.toLowerCase() || '';
+    
+    try {
+      // Fiber Frame - Only type that has separate color selection
+      if (frameName.includes('fiber')) {
+        // Fiber frames REQUIRE color selection
+        if (!colorName) return null; // Don't show preview until color is selected
+        
+        let fileName = '';
+        if (colorName.includes('black')) {
+          fileName = lang === 'sinhala' 
+            ? 'black fiber frame - with glass- sinhala.jpg'
+            : 'black fiber frame - with glass.jpg';
+        } else if (colorName.includes('white')) {
+          fileName = lang === 'sinhala'
+            ? 'white fiber frame - with glass - sinhala.jpg'
+            : 'white fiber frame - with glass.jpg';
+        } else if (colorName.includes('brown')) {
+          fileName = lang === 'sinhala'
+            ? 'brown fiber frame - with glass - sinhala.jpg'
+            : 'brown fiber frame - with glass.jpg';
+        } else if (colorName.includes('pine') || colorName.includes('wood')) {
+          fileName = lang === 'sinhala'
+            ? 'Pinewoord color  fiber frame - with glass - sinhala.jpg'
+            : 'Pinewoord color  fiber frame - with glass.jpg';
+        }
+        if (fileName) {
+          return new URL(`../assets/frames/fiber sinhala and english/${fileName}`, import.meta.url).href;
+        }
+      }
+      
+      // For non-Fiber frames, detect color from the frame type name itself
+      // Plymount Nonmargine Normal - Black or White
+      // Variations: "nonmargine", "non-margine", "non margine", "without margine"
+      if ((frameName.includes('nonmargine') || frameName.includes('non-margine') || 
+           frameName.includes('non margine') || frameName.includes('without margine')) && 
+          !frameName.includes('box')) {
+        let fileName = '';
+        const suffix = lang === 'sinhala' ? 'sin' : 'eng';
+        
+        // Check if frame name contains color
+        if (frameName.includes('black')) {
+          fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+        } else if (frameName.includes('white')) {
+          fileName = `Plymount Nonmargine Normal -White - ${suffix}.jpg`;
+        } else {
+          // Default to black if no color specified
+          fileName = `Plymount Nonmargine Normal -Black - ${suffix}.jpg`;
+        }
+        return new URL(`../assets/frames/Plymount Nonmargine Normal/${fileName}`, import.meta.url).href;
+      }
+      
+      // Plymount Margine Normal - Black or White
+      // Variations: "margine", "with margine", "margined"
+      // Make sure it's NOT "nonmargine"
+      if ((frameName.includes('margine') || frameName.includes('margin')) && 
+          !frameName.includes('nonmargine') && !frameName.includes('non-margine') && 
+          !frameName.includes('box')) {
+        let fileName = '';
+        const suffix = lang === 'sinhala' ? 'sin' : 'eng';
+        
+        if (frameName.includes('black')) {
+          fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+        } else if (frameName.includes('white')) {
+          fileName = `Plymount Margine Normal- White - ${suffix}.jpg`;
+        } else {
+          // Default to black
+          fileName = `Plymount Margine Normal- Black - ${suffix}.jpg`;
+        }
+        return new URL(`../assets/frames/Plymount Margine Normal/${fileName}`, import.meta.url).href;
+      }
+      
+      // Plymount Box Frame
+      if (frameName.includes('box')) {
+        let fileName = '';
+        const langSuffix = lang === 'sinhala' ? 'sinhala' : 'english';
+        
+        if (frameName.includes('plastic') || frameName.includes('beading')) {
+          fileName = `Plymount Box Frame With Plastic Beading - ${lang === 'sinhala' ? 'sin' : 'eng'}.jpg`;
+        } else if (frameName.includes('black')) {
+          fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+        } else if (frameName.includes('white')) {
+          fileName = `Plymount Box Frame Nonmargine -white ${langSuffix}.jpg`;
+        } else {
+          // Default to black
+          fileName = `Plymount Box Frame Nonmargine -Black ${langSuffix}.jpg`;
+        }
+        return new URL(`../assets/frames/Plymount Box Frame Nonmargine/${fileName}`, import.meta.url).href;
+      }
+      
+      // Embossed Frames - Black or White
+      if (frameName.includes('emboss')) {
+        let fileName = '';
+        const suffix = lang === 'sinhala' ? 'sin' : 'eng';
+        
+        if (frameName.includes('black')) {
+          fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+        } else if (frameName.includes('white')) {
+          fileName = `Plymount Embossed Plain white - ${suffix}.jpg`;
+        } else {
+          // Default to black
+          fileName = `Plymount Embossed Plain Black - ${suffix}.jpg`;
+        }
+        return new URL(`../assets/frames/Embossed Frames/${fileName}`, import.meta.url).href;
+      }
+      
+    } catch (error) {
+      console.error('Error loading frame image:', error);
+    }
+    
+    return null;
+  };
+
   const steps = [
     { id: 1, name: t.order?.steps?.category || "Category" },
-    { id: 2, name: t.order?.steps?.details || "Preferences" },
-    { id: 3, name: t.order?.steps?.frame || "Frame & Size" },
-    { id: 4, name: t.order?.steps?.delivery || "Delivery" },
-    { id: 5, name: t.order?.steps?.confirm || "Confirm" },
+    { id: 2, name: t.order?.steps?.frame || "Frame & Size" },
+    { id: 3, name: t.order?.steps?.delivery || "Delivery" },
+    { id: 4, name: t.order?.steps?.confirm || "Confirm" },
   ];
 
   // Load categories when component mounts
@@ -111,7 +236,17 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       const response = await fetch("http://localhost:3001/api/categories");
       const result = await response.json();
       if (result.success) {
-        setCategories(result.data);
+        // Sort categories in desired order: Oil Painting, Mini Frames, 100 Designs, Cute Collections
+        const categoryOrder = ['OIL', 'MINI', 'HUNDRED', 'CUTE'];
+        const sortedCategories = result.data.sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a.code);
+          const indexB = categoryOrder.indexOf(b.code);
+          // If category code not in order array, put it at the end
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
+        setCategories(sortedCategories);
       }
     } catch (error) {
       console.error("Error loading categories:", error);
@@ -142,9 +277,36 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       const result = await response.json();
       if (result.success) {
         setSizes(result.data);
+        // Fetch prices for all sizes
+        loadPricesForSizes(frameTypeId, result.data);
       }
     } catch (error) {
       console.error("Error loading sizes:", error);
+    }
+  };
+
+  const loadPricesForSizes = async (frameTypeId, sizesData) => {
+    try {
+      const pricesMap = {};
+      
+      // Fetch price for each size
+      for (const size of sizesData) {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/api/prices/${frameTypeId}/${size.id}`,
+          );
+          const result = await response.json();
+          if (result.success) {
+            pricesMap[size.id] = result.data;
+          }
+        } catch (error) {
+          console.error(`Error loading price for size ${size.id}:`, error);
+        }
+      }
+      
+      setSizePrices(pricesMap);
+    } catch (error) {
+      console.error("Error loading prices:", error);
     }
   };
 
@@ -167,24 +329,20 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       ...prev,
       [field]: value,
     }));
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // Convert to base64 for preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedImage(e.target.result);
-        handleInputChange("imageUrl", e.target.result); // Store base64 in orderData
-      };
-      reader.readAsDataURL(file);
+    
+    // Clear prices when frame type changes
+    if (field === 'frameTypeId') {
+      setSizePrices({});
     }
-  };
-
-  const removeImage = () => {
-    setUploadedImage(null);
-    handleInputChange("imageUrl", "");
+    
+    // Clear size selection when frame type changes
+    if (field === 'frameTypeId' && value !== orderData.frameTypeId) {
+      setOrderData((prev) => ({
+        ...prev,
+        [field]: value,
+        sizeId: '', // Clear size selection
+      }));
+    }
   };
 
   const nextStep = () => {
@@ -193,19 +351,16 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       alert("Please select a category");
       return;
     }
-    if (currentStep === 2) {
-      // Step 2 now has preferences - no required validation for background color or image
-    }
-    if (currentStep === 3 && !orderData.frameTypeId) {
+    if (currentStep === 2 && !orderData.frameTypeId) {
       alert("Please select a frame type");
       return;
     }
-    if (currentStep === 3 && !orderData.sizeId) {
+    if (currentStep === 2 && !orderData.sizeId) {
       alert("Please select a size");
       return;
     }
     if (
-      currentStep === 4 &&
+      currentStep === 3 &&
       (!orderData.customerName ||
         !orderData.customerWhatsapp ||
         !orderData.customerAddress ||
@@ -217,14 +372,18 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       return;
     }
 
-    if (currentStep < 5) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
+      // Scroll to top of page smoothly
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      // Scroll to top of page smoothly
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -235,106 +394,111 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       // Get selected names for better display
       const selectedCategory =
         categories.find((c) => c.id == orderData.categoryId)?.name || "Unknown";
+      const categoryCode = categories.find((c) => c.id == orderData.categoryId)?.code;
       const selectedFrameType =
-        frameTypes.find((f) => f.id == orderData.frameTypeId)?.name ||
-        "Unknown";
+        frameTypes.find((f) => f.id == orderData.frameTypeId)?.name || "Unknown";
       const selectedSize =
         sizes.find((s) => s.id == orderData.sizeId)?.display || "Unknown";
       const selectedColor =
-        frameColors.find((c) => c.id == orderData.frameColorId)?.name ||
-        "No color selected";
+        frameColors.find((c) => c.id == orderData.frameColorId)?.name || "No color selected";
+      
+      // Calculate pricing
+      const priceInfo = sizePrices[orderData.sizeId];
+      let priceBreakdown = "";
+      let totalPrice = 0;
+      
+      if (priceInfo) {
+        totalPrice = priceInfo.final_price;
+        priceBreakdown += `💰 *Price Breakdown:*\n`;
+        priceBreakdown += `• Base Price: Rs. ${priceInfo.base_price.toLocaleString()}\n`;
+        
+        if (priceInfo.price_increment > 0) {
+          priceBreakdown += `• Category Charge: Rs. ${priceInfo.price_increment.toLocaleString()}\n`;
+        }
+        
+        // Cute Collection charge
+        const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
+        if (cuteCollectionCharge > 0) {
+          priceBreakdown += `• Cute Collection: Rs. ${cuteCollectionCharge.toLocaleString()}\n`;
+          totalPrice += cuteCollectionCharge;
+        }
+        
+        // Per-person charge
+        const needsPersonCharge = categoryCode === 'OIL' || categoryCode === 'CUTE';
+        const personCharge = needsPersonCharge && orderData.numberOfPersons > 1 
+          ? (orderData.numberOfPersons - 1) * 450 
+          : 0;
+        if (personCharge > 0) {
+          priceBreakdown += `• Additional Persons: Rs. ${personCharge.toLocaleString()} (${orderData.numberOfPersons - 1} × Rs. 450)\n`;
+          totalPrice += personCharge;
+        }
+        
+        // Package charge
+        const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
+        if (packageCharge > 0) {
+          priceBreakdown += `• Premium Package: Rs. ${packageCharge.toLocaleString()}\n`;
+          totalPrice += packageCharge;
+        }
+        
+        priceBreakdown += `━━━━━━━━━━━━━━━━\n`;
+        priceBreakdown += `*TOTAL: Rs. ${totalPrice.toLocaleString()}*\n\n`;
+      }
 
       // Create main order message
       let message =
-        `🖼️ *New Photo Frame Order #${orderId}*\n\n` +
-        `📋 *Order Details:*\n` +
-        `• Category: ${selectedCategory}\n` +
+        `🖼️ *NEW PHOTO FRAME ORDER #${orderId}*\n\n` +
+        `━━━━━━━━━━━━━━━━\n` +
+        `📋 *ORDER DETAILS*\n` +
+        `━━━━━━━━━━━━━━━━\n` +
+        `• Category: ${selectedCategory}\n`;
+      
+      // Add design number for 100 Designs category
+      if (categoryCode === 'HUNDRED' && orderData.designSampleId) {
+        message += `• Design: DT ${orderData.designSampleId} ✅\n`;
+      }
+      
+      message += 
         `• Frame Type: ${selectedFrameType}\n` +
         `• Size: ${selectedSize}\n` +
-        `• Color: ${selectedColor}\n` +
-        `• Number of Persons: ${orderData.numberOfPersons || 1}\n` +
-        `• Background Color: ${orderData.backgroundColor || "Not specified"}\n\n` +
-        ` *Delivery Information:*\n` +
+        `• Color: ${selectedColor}\n`;
+      
+      // Add person/background info only for Oil and Cute
+      const needsPersonInfo = categoryCode === 'OIL' || categoryCode === 'CUTE';
+      if (needsPersonInfo) {
+        message += `• Number of Persons: ${orderData.numberOfPersons || 1}\n`;
+        if (orderData.backgroundColor) {
+          message += `• Background Color: ${orderData.backgroundColor}\n`;
+        }
+      }
+      
+      message += `• Package: ${orderData.packageType === 'premium' ? '✨ Premium Package' : '📦 Free Package'}\n\n`;
+      
+      // Add price breakdown
+      message += priceBreakdown;
+      
+      message +=
+        `━━━━━━━━━━━━━━━━\n` +
+        `👤 *CUSTOMER INFO*\n` +
+        `━━━━━━━━━━━━━━━━\n` +
         `• Name: ${orderData.customerName}\n` +
-        `• Mobile: ${orderData.customerWhatsapp}\n` +
-        `• Delivery Address: ${orderData.customerAddress}\n` +
-        `• Delivery To: ${orderData.deliveryTo || orderData.customerAddress}\n` +
-        `• Delivery Date: ${orderData.deliveryDate ? new Date(orderData.deliveryDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }) : "Not specified"}\n\n` +
-        `📝 *Notes:* ${orderData.notes || "None"}\n\n`;
+        `• WhatsApp: ${orderData.customerWhatsapp}\n` +
+        `• Address: ${orderData.customerAddress}\n\n` +
+        `🚚 *DELIVERY INFO*\n` +
+        `━━━━━━━━━━━━━━━━\n` +
+        `• Location: ${orderData.deliveryTo || orderData.customerAddress}\n` +
+        `• Preferred Date: ${orderData.deliveryDate ? new Date(orderData.deliveryDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }) : "Not specified"}\n\n`;
 
-      // Add image status
-      if (orderData.imageUrl) {
-        message += `📸 *Customer Image:* Attached (see next message)\n\n`;
+      if (orderData.notes) {
+        message += `📝 *SPECIAL NOTES*\n${orderData.notes}\n\n`;
       }
 
-      message += `✅ Order received successfully!`;
+      message += `━━━━━━━━━━━━━━━━\n✅ Order Confirmed!\nThank you for your order! 🙏`;
 
-      const whatsappNumber =
-        import.meta.env.VITE_WHATSAPP_NUMBER || "+94702923943";
+      const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+94702923943";
       const whatsappUrl = `https://wa.me/${whatsappNumber.replace("+", "")}?text=${encodeURIComponent(message)}`;
 
-      // Open first WhatsApp message with order details
+      // Open WhatsApp message with order details
       window.open(whatsappUrl, "_blank");
-
-      // If there's an image, open a second WhatsApp message after a delay
-      if (orderData.imageUrl) {
-        setTimeout(() => {
-          const imageMessage =
-            `📸 *Order #${orderId} - Customer Image*\n\n` +
-            `Please find the customer's image below.\n` +
-            `Copy and paste this image data, or ask the customer to send the image directly.\n\n` +
-            `*Customer:* ${orderData.customerName}\n` +
-            `*WhatsApp:* ${orderData.customerWhatsapp}\n\n` +
-            `*Image Data:* ${orderData.imageUrl.substring(0, 100)}...\n\n` +
-            `💡 *Tip:* You can ask the customer to send the image directly to this WhatsApp number.`;
-
-          const imageWhatsappUrl = `https://wa.me/${whatsappNumber.replace("+", "")}?text=${encodeURIComponent(imageMessage)}`;
-
-          // Show user the options
-          const userChoice = confirm(
-            `📤 Send Customer Image?\n\n` +
-              `Option 1: Click OK to send image data via WhatsApp\n` +
-              `Option 2: Click Cancel to copy image and paste manually\n\n` +
-              `Note: For best results, ask customer to send image directly to seller's WhatsApp.`,
-          );
-
-          if (userChoice) {
-            // Open WhatsApp with image data
-            window.open(imageWhatsappUrl, "_blank");
-          } else {
-            // Copy image data to clipboard for manual paste
-            try {
-              navigator.clipboard.writeText(orderData.imageUrl).then(() => {
-                alert(
-                  `� Image Data Copied!\n\n` +
-                    `The customer's image data has been copied to your clipboard.\n` +
-                    `You can paste it in WhatsApp or any other application.\n\n` +
-                    `💡 Alternative: Ask customer (${orderData.customerWhatsapp}) to send the image directly.`,
-                );
-              });
-            } catch (clipboardError) {
-              console.log("Clipboard not available:", clipboardError);
-              // Fallback: show the image in a new window for manual handling
-              const imageWindow = window.open("", "_blank");
-              imageWindow.document.write(`
-                <html>
-                  <head><title>Order #${orderId} - Customer Image</title></head>
-                  <body style="font-family: Arial, sans-serif; padding: 20px; text-align: center;">
-                    <h2>Order #${orderId} - Customer Image</h2>
-                    <p><strong>Customer:</strong> ${orderData.customerName}</p>
-                    <p><strong>WhatsApp:</strong> ${orderData.customerWhatsapp}</p>
-                    <img src="${orderData.imageUrl}" style="max-width: 100%; max-height: 80vh; border: 1px solid #ddd; border-radius: 8px;" />
-                    <p style="margin-top: 20px; color: #666;">
-                      Right-click the image above to copy or save it.<br>
-                      Then paste/attach it in your WhatsApp conversation.
-                    </p>
-                  </body>
-                </html>
-              `);
-            }
-          }
-        }, 3000); // Wait 3 seconds after first message
-      }
 
       console.log("✅ WhatsApp summary sent successfully");
     } catch (error) {
@@ -354,12 +518,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         sizeId: orderData.sizeId,
         frameColorId: orderData.frameColorId || null,
         numberOfPersons: orderData.numberOfPersons || 1,
+        packageType: orderData.packageType || 'free',
         customerName: orderData.customerName,
         customerAddress: orderData.customerAddress,
         customerWhatsapp: orderData.customerWhatsapp,
         deliveryTo: orderData.deliveryTo || orderData.customerAddress,
+        deliveryDate: orderData.deliveryDate || null,
         backgroundColor: orderData.backgroundColor || null,
-        imageUrl: orderData.imageUrl || null,
         notes: orderData.notes || null,
       };
 
@@ -387,12 +552,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         sizeId: "",
         frameColorId: "",
         numberOfPersons: 1,
+        packageType: "free",
         customerName: "",
         customerAddress: "",
         customerWhatsapp: "",
         deliveryTo: "",
+        deliveryDate: "",
         backgroundColor: "",
-        imageUrl: "",
         notes: "",
       });
     } catch (error) {
@@ -407,10 +573,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         return (
           <div className="form-step">
             <div className="mb-8">
-              <h3 className="mb-4 text-center text-2xl font-semibold text-green-3">
+              <h3 className="mb-4 text-2xl font-semibold text-center text-green-3">
                 {t.order?.selectCategory || "Choose Your Style"}
               </h3>
-              <p className="mb-8 text-center leading-relaxed text-gray-600">
+              <p className="mb-8 leading-relaxed text-center text-gray-600">
                 Select the photo frame style that best matches your vision
               </p>
             </div>
@@ -442,10 +608,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         }`}
                       />
                       {orderData.categoryId == category.id && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-green-2 bg-opacity-20">
-                          <div className="animate-pulse rounded-full bg-green-2 p-3 text-white shadow-lg">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="p-3 text-white rounded-full shadow-xl animate-pulse bg-green-2">
                             <svg
-                              className="h-6 w-6"
+                              className="w-8 h-8"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -459,11 +625,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         </div>
                       )}
                       {/* Category type badge */}
-                      <div className="absolute bottom-2 left-2 rounded bg-black bg-opacity-60 px-2 py-1 text-xs text-white">
+                      <div className="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
                         Click to Select
                       </div>
                     </div>
-                    <div className="bg-white p-4">
+                    <div className="p-4 bg-white">
                       <h4 className="mb-2 text-lg font-semibold text-gray-800">
                         {category.name}
                       </h4>
@@ -485,7 +651,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
             {orderData.categoryId && (
               <div className="mt-8 text-center">
-                <p className="inline-block rounded-lg bg-green-50 px-4 py-3 font-medium text-green-2">
+                <p className="inline-block px-4 py-3 font-medium rounded-lg bg-green-50 text-green-2">
                   ✓ Selected:{" "}
                   {categories.find((c) => c.id == orderData.categoryId)?.name}
                 </p>
@@ -496,138 +662,96 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
       case 2:
         return (
-          <div className="form-step space-y-6">
-            <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
-                {t.order?.fields?.numberOfPersons || "Number of Persons"}
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                value={orderData.numberOfPersons}
-                onChange={(e) =>
-                  handleInputChange("numberOfPersons", parseInt(e.target.value))
-                }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
-                {t.order?.fields?.backgroundColor || "Background Color"}{" "}
-                <span className="text-sm font-normal text-gray-500">
-                  (Optional)
-                </span>
-              </label>
-              <div className="flex items-center space-x-4">
-                <input
-                  type="color"
-                  value={orderData.backgroundColor || "#ffffff"}
-                  onChange={(e) =>
-                    handleInputChange("backgroundColor", e.target.value)
-                  }
-                  className="h-12 w-16 cursor-pointer rounded-lg border border-gray-300"
-                />
-                <div className="flex-1">
+          <div className="space-y-6 form-step">
+            {/* Number of Persons - Only for Oil Painting and Cute Collections */}
+            {orderData.categoryId && (() => {
+              const selectedCategory = categories.find(
+                (cat) => cat.id === parseInt(orderData.categoryId)
+              );
+              const categoryCode = selectedCategory?.code;
+              return categoryCode === 'OIL' || categoryCode === 'CUTE' ? (
+                <div className="form-group">
+                  <label className="block mb-3 font-medium text-green-3">
+                    {t.order?.fields?.numberOfPersons || "Number of Persons"}
+                    <span className="ml-2 text-sm font-normal text-gray-500">
+                      (+Rs. 450 per additional person)
+                    </span>
+                  </label>
                   <input
-                    type="text"
-                    value={orderData.backgroundColor || ""}
+                    type="number"
+                    min="1"
+                    max="10"
+                    value={orderData.numberOfPersons}
                     onChange={(e) =>
-                      handleInputChange("backgroundColor", e.target.value)
+                      handleInputChange("numberOfPersons", parseInt(e.target.value))
                     }
-                    placeholder={
-                      t.order?.fields?.selectBackgroundColor ||
-                      "#ffffff or color name"
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                   />
                 </div>
-              </div>
-            </div>
+              ) : null;
+            })()}
 
-            <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
-                {t.order?.fields?.uploadImageOptional ||
-                  "Upload Your Image (Optional)"}
-              </label>
-              <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-green-2">
-                {uploadedImage ? (
-                  <div className="space-y-4">
-                    <img
-                      src={uploadedImage}
-                      alt="Uploaded preview"
-                      className="mx-auto max-h-48 max-w-full rounded-lg shadow-md"
+            {/* Background Color - Only for Oil Painting and Cute Collections */}
+            {orderData.categoryId && (() => {
+              const selectedCategory = categories.find(
+                (cat) => cat.id === parseInt(orderData.categoryId)
+              );
+              const categoryCode = selectedCategory?.code;
+              return categoryCode === 'OIL' || categoryCode === 'CUTE' ? (
+                <div className="form-group">
+                  <label className="block mb-3 font-medium text-green-3">
+                    {t.order?.fields?.backgroundColor || "Background Color"}{" "}
+                    <span className="text-sm font-normal text-gray-500">
+                      (Optional)
+                    </span>
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <input
+                      type="color"
+                      value={orderData.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        handleInputChange("backgroundColor", e.target.value)
+                      }
+                      className="w-16 h-12 border border-gray-300 rounded-lg cursor-pointer"
                     />
-                    <div className="flex justify-center space-x-4">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          document.getElementById("imageUpload").click()
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value={orderData.backgroundColor || ""}
+                        onChange={(e) =>
+                          handleInputChange("backgroundColor", e.target.value)
                         }
-                        className="rounded-lg bg-green-2 px-4 py-2 text-white transition-colors hover:bg-green-1"
-                      >
-                        {t.order?.fields?.chooseFile || "Change Image"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={removeImage}
-                        className="rounded-lg bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
-                      >
-                        {t.order?.fields?.removeImage || "Remove"}
-                      </button>
+                        placeholder={
+                          t.order?.fields?.selectBackgroundColor ||
+                          "#ffffff or color name"
+                        }
+                        className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
+                      />
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="text-gray-400">
-                      <svg
-                        className="mx-auto h-12 w-12"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          document.getElementById("imageUpload").click()
-                        }
-                        className="rounded-lg bg-green-2 px-6 py-3 text-white transition-colors hover:bg-green-1"
-                      >
-                        {t.order?.fields?.chooseFile || "Choose Image"}
-                      </button>
-                      <p className="mt-2 text-sm text-gray-500">
-                        Upload your photo for the frame (JPG, PNG, max 5MB)
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  id="imageUpload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </div>
-            </div>
-          </div>
-        );
+                </div>
+              ) : null;
+            })()}
 
-      case 3:
-        return (
-          <div className="form-step space-y-6">
+            {/* Design Selection - Only for 100 Designs category */}
+            {orderData.categoryId && (() => {
+              const selectedCategory = categories.find(
+                (cat) => cat.id === parseInt(orderData.categoryId)
+              );
+              const categoryCode = selectedCategory?.code;
+              return categoryCode === 'HUNDRED' ? (
+                <div className="form-group">
+                  <DesignGallery
+                    onSelectDesign={(designNum) => handleInputChange("designSampleId", designNum)}
+                    selectedDesignId={orderData.designSampleId}
+                  />
+                </div>
+              ) : null;
+            })()}
+
+            {/* Frame Type Selection */}
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.frameType || "Frame Type"}
               </label>
               <select
@@ -635,7 +759,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 onChange={(e) =>
                   handleInputChange("frameTypeId", e.target.value)
                 }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                 disabled={!orderData.categoryId}
               >
                 <option value="">
@@ -655,66 +779,240 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               )}
             </div>
 
-            <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
-                Size
-              </label>
-              <select
-                value={orderData.sizeId}
-                onChange={(e) => handleInputChange("sizeId", e.target.value)}
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
-                disabled={!orderData.frameTypeId}
-              >
-                <option value="">Choose size...</option>
-                {sizes.map((size) => (
-                  <option key={size.id} value={size.id}>
-                    {size.display} ({size.width} x {size.height} {size.unit})
-                  </option>
-                ))}
-              </select>
-              {!orderData.frameTypeId && (
-                <p className="mt-3 text-sm text-gray-500">
-                  Please select a frame type first
-                </p>
-              )}
-            </div>
+            {/* Frame Color - Only show for Fiber frames (frames that allow color) */}
+            {orderData.frameTypeId && (() => {
+              const selectedFrameType = frameTypes.find(
+                (ft) => ft.id === parseInt(orderData.frameTypeId)
+              );
+              return selectedFrameType?.allows_color ? (
+                <div className="form-group">
+                  <label className="block mb-3 font-medium text-green-3">
+                    Frame Color{" "}
+                    <span className="text-sm font-normal text-gray-500">
+                      (Optional)
+                    </span>
+                  </label>
+                  <select
+                    value={orderData.frameColorId}
+                    onChange={(e) =>
+                      handleInputChange("frameColorId", e.target.value)
+                    }
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
+                  >
+                    <option value="">Choose color (optional)...</option>
+                    {frameColors.map((color) => (
+                      <option key={color.id} value={color.id}>
+                        {color.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : null;
+            })()}
+
+            {/* Frame Preview - Show selected frame image based on type, color and language */}
+            {orderData.frameTypeId && (() => {
+              const selectedFrameType = frameTypes.find(
+                (ft) => ft.id === parseInt(orderData.frameTypeId)
+              );
+              const selectedColor = frameColors.find(
+                (c) => c.id === parseInt(orderData.frameColorId)
+              );
+              
+              const frameImage = getFrameImage(
+                selectedFrameType?.name,
+                selectedColor?.name,
+                language
+              );
+              
+              // Show preview if image is available
+              if (frameImage) {
+                return (
+                  <div className="form-group">
+                    <label className="block mb-2 text-sm font-medium text-green-3">
+                      🖼️ Frame Preview
+                    </label>
+                    <div className="relative max-w-xs p-3 mx-auto bg-white border-2 rounded-lg shadow-md border-green-2 group">
+                      <div 
+                        className="relative cursor-pointer"
+                        onClick={() => setFramePreviewModal(frameImage)}
+                      >
+                        <img
+                          src={frameImage}
+                          alt={`${selectedFrameType?.name} ${selectedColor?.name || ''}`}
+                          className="object-contain w-full h-auto transition-transform rounded-md shadow-sm max-h-48 group-hover:scale-105"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            console.error('Frame image failed to load');
+                          }}
+                        />
+                        {/* Zoom Icon Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center transition-all bg-black bg-opacity-0 rounded-md group-hover:bg-opacity-20">
+                          <div className="p-2 transition-opacity bg-black rounded-full opacity-0 bg-opacity-60 group-hover:opacity-100">
+                            <svg
+                              className="w-6 h-6 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-center">
+                        <p className="text-sm font-semibold text-gray-700">
+                          {selectedFrameType?.name}
+                          {selectedColor && ` - ${selectedColor.name}`}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {language === 'si' ? 'විශාල කිරීමට ක්ලික් කරන්න' : 'Click to zoom'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              
+              // Show hint ONLY for Fiber frames (the only type with color selection)
+              if (selectedFrameType?.allows_color && !orderData.frameColorId) {
+                return (
+                  <div className="form-group">
+                    <div className="p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
+                      <p className="text-gray-600">
+                        👆 {language === 'si' 
+                          ? 'රාමුවේ පෙරදසුන බැලීමට වර්ණයක් තෝරන්න' 
+                          : 'Select a color above to see frame preview'}
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+              
+              return null;
+            })()}
 
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
-                Frame Color{" "}
-                <span className="text-sm font-normal text-gray-500">
-                  (Optional)
-                </span>
+              <label className="block mb-3 font-medium text-green-3">
+                Size
               </label>
-              <select
-                value={orderData.frameColorId}
-                onChange={(e) =>
-                  handleInputChange("frameColorId", e.target.value)
-                }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
-                disabled={!orderData.frameTypeId}
-              >
-                <option value="">Choose color (optional)...</option>
-                {frameColors.map((color) => (
-                  <option key={color.id} value={color.id}>
-                    {color.name}
-                  </option>
-                ))}
-              </select>
-              {!orderData.frameTypeId && (
-                <p className="mt-3 text-sm text-gray-500">
+              
+              {!orderData.frameTypeId ? (
+                <div className="w-full p-4 text-gray-500 border border-gray-300 rounded-lg bg-gray-50">
                   Please select a frame type first
-                </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {sizes.map((size) => {
+                    const priceInfo = sizePrices[size.id];
+                    const isSelected = orderData.sizeId === String(size.id);
+                    
+                    return (
+                      <button
+                        key={size.id}
+                        type="button"
+                        onClick={() => handleInputChange("sizeId", String(size.id))}
+                        className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all ${
+                          isSelected
+                            ? "border-green-2 bg-green-50"
+                            : "border-gray-200 hover:border-green-2 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="font-medium text-left text-gray-700">
+                          {size.display} 
+                          <span className="ml-2 text-sm text-gray-500">
+                            ({size.width} x {size.height} {size.unit})
+                          </span>
+                        </span>
+                        {priceInfo && (
+                          <span className={`text-right font-bold ${
+                            isSelected ? "text-green-3" : "text-gray-700"
+                          }`}>
+                            LKR {priceInfo.final_price.toLocaleString()}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
+              
+              {/* Display selected size price information */}
+              {orderData.sizeId && sizePrices[orderData.sizeId] && (() => {
+                const priceInfo = sizePrices[orderData.sizeId];
+                const categoryCode = categories.find(c => c.id === orderData.categoryId)?.code;
+                
+                // Per-person charge (for Oil and Cute)
+                const needsPersonCharge = categoryCode === 'OIL' || categoryCode === 'CUTE';
+                const personCharge = needsPersonCharge && orderData.numberOfPersons > 1 
+                  ? (orderData.numberOfPersons - 1) * 450 
+                  : 0;
+                
+                // Cute Collection category charge
+                const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
+                
+                // Premium package charge
+                const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
+                
+                const totalPrice = priceInfo.final_price + personCharge + cuteCollectionCharge + packageCharge;
+                
+                return (
+                  <div className="p-4 mt-4 border border-green-200 rounded-lg bg-green-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">
+                          Selected Size Price
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {priceInfo.category_name}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-green-3">
+                          LKR {totalPrice.toLocaleString()}
+                        </p>
+                        <div className="mt-1 text-xs text-gray-500">
+                          {priceInfo.price_increment > 0 && (
+                            <p>
+                              Base: LKR {priceInfo.base_price.toLocaleString()} + 
+                              LKR {priceInfo.price_increment.toLocaleString()} (category)
+                            </p>
+                          )}
+                          {cuteCollectionCharge > 0 && (
+                            <p>
+                              + LKR {cuteCollectionCharge.toLocaleString()} (Cute Collection)
+                            </p>
+                          )}
+                          {personCharge > 0 && (
+                            <p>
+                              + LKR {personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} additional {orderData.numberOfPersons - 1 === 1 ? 'person' : 'persons'})
+                            </p>
+                          )}
+                          {packageCharge > 0 && (
+                            <p>
+                              + LKR {packageCharge.toLocaleString()} (Premium Package)
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         );
 
-      case 4:
+      case 3:
         return (
-          <div className="form-step space-y-6">
+          <div className="space-y-6 form-step">
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.fullName || "Full Name"}
               </label>
               <input
@@ -723,14 +1021,14 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 onChange={(e) =>
                   handleInputChange("customerName", e.target.value)
                 }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                 placeholder={
                   t.order?.fields?.enterFullName || "Enter your full name"
                 }
               />
             </div>
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.whatsappNumber || "WhatsApp Number"}
               </label>
               <input
@@ -739,7 +1037,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 onChange={(e) =>
                   handleInputChange("customerWhatsapp", e.target.value)
                 }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                 placeholder={
                   t.order?.fields?.enterWhatsappNumber ||
                   "Enter your WhatsApp number"
@@ -747,7 +1045,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               />
             </div>
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.customerAddress || "Customer Address"}
               </label>
               <textarea
@@ -755,7 +1053,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 onChange={(e) =>
                   handleInputChange("customerAddress", e.target.value)
                 }
-                className="w-full resize-none rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:border-transparent focus:ring-2 focus:ring-green-2"
                 rows="3"
                 placeholder={
                   t.order?.fields?.enterCompleteAddress ||
@@ -763,8 +1061,76 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 }
               />
             </div>
+
+            {/* Package Selection */}
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
+                {t.order?.fields?.packageType || "Package Type"}
+              </label>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {/* Free Package */}
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("packageType", "free")}
+                  className={`relative overflow-hidden rounded-xl border-4 transition-all duration-200 ${
+                    orderData.packageType === "free"
+                      ? "border-green-3 shadow-lg scale-105"
+                      : "border-gray-200 hover:border-green-2"
+                  }`}
+                >
+                  <img
+                    src={freePackageImg}
+                    alt="Free Delivery Package"
+                    className="object-cover w-full h-48"
+                  />
+                  <div className={`absolute top-0 left-0 right-0 px-4 py-2 text-center font-bold text-white ${
+                    orderData.packageType === "free" ? "bg-green-3" : "bg-gray-700 bg-opacity-70"
+                  }`}>
+                    Free Package
+                  </div>
+                  {orderData.packageType === "free" && (
+                    <div className="absolute p-2 text-white rounded-full top-2 right-2 bg-green-3">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+
+                {/* Premium Package */}
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("packageType", "premium")}
+                  className={`relative overflow-hidden rounded-xl border-4 transition-all duration-200 ${
+                    orderData.packageType === "premium"
+                      ? "border-green-3 shadow-lg scale-105"
+                      : "border-gray-200 hover:border-green-2"
+                  }`}
+                >
+                  <img
+                    src={premiumPackageImg}
+                    alt="Premium Package"
+                    className="object-cover w-full h-48"
+                  />
+                  <div className={`absolute top-0 left-0 right-0 px-4 py-2 text-center font-bold text-white ${
+                    orderData.packageType === "premium" ? "bg-green-3" : "bg-gray-700 bg-opacity-70"
+                  }`}>
+                    Premium Package
+                    <span className="block text-sm font-normal">+Rs. 450</span>
+                  </div>
+                  {orderData.packageType === "premium" && (
+                    <div className="absolute p-2 text-white rounded-full top-2 right-2 bg-green-3">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.deliveryLocation || "Delivery Location"}
               </label>
               <select
@@ -772,7 +1138,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 onChange={(e) =>
                   handleInputChange("deliveryTo", e.target.value)
                 }
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
               >
                 <option value="">
                   {t.order?.fields?.selectDeliveryLocation ||
@@ -787,30 +1153,46 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               </select>
             </div>
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.preferredDeliveryDate ||
                   "Preferred Delivery Date"}
               </label>
-              <input
-                type="date"
-                value={orderData.deliveryDate}
-                onChange={(e) =>
-                  handleInputChange("deliveryDate", e.target.value)
-                }
-                min={(() => {
-                  const today = new Date();
-                  today.setDate(today.getDate() + 3); // 3 days from today
-                  return today.toISOString().split("T")[0];
-                })()}
-                className="w-full rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
-              />
-              <p className="mt-2 text-sm text-gray-500">
+              <div className="relative">
+                <DatePicker
+                  selected={orderData.deliveryDate ? new Date(orderData.deliveryDate) : null}
+                  onChange={(date) => {
+                    if (date) {
+                      // Format date as YYYY-MM-DD for consistency
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1).padStart(2, '0');
+                      const day = String(date.getDate()).padStart(2, '0');
+                      handleInputChange("deliveryDate", `${year}-${month}-${day}`);
+                    } else {
+                      handleInputChange("deliveryDate", "");
+                    }
+                  }}
+                  minDate={(() => {
+                    const today = new Date();
+                    today.setDate(today.getDate() + 4); // 4 days from today
+                    return today;
+                  })()}
+                  dateFormat="MMMM d, yyyy (EEEE)"
+                  placeholderText="Select delivery date"
+                  className="w-full p-4 text-lg transition-colors border-2 border-gray-300 rounded-lg cursor-pointer focus:border-green-3 focus:ring-2 focus:ring-green-2 hover:border-green-2"
+                  calendarClassName="custom-calendar"
+                  wrapperClassName="w-full"
+                  showPopperArrow={false}
+                  isClearable
+                />
+              </div>
+              <p className="p-3 mt-2 text-sm text-gray-500 border border-blue-200 rounded-lg bg-blue-50">
                 📅{" "}
                 {t.order?.fields?.deliveryAvailableFrom ||
                   "Delivery available from"}{" "}
+                <span className="font-semibold text-green-3">
                 {(() => {
                   const minDate = new Date();
-                  minDate.setDate(minDate.getDate() + 3);
+                  minDate.setDate(minDate.getDate() + 4);
                   return minDate.toLocaleDateString(
                     language === "si" ? "si-LK" : "en-US",
                     {
@@ -820,19 +1202,20 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                       day: "numeric",
                     },
                   );
-                })()}{" "}
+                })()}
+                </span>{" "}
                 {t.order?.fields?.onwards || "onwards"}
               </p>
             </div>
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.specialInstructionsOptional ||
                   "Special Instructions (Optional)"}
               </label>
               <textarea
                 value={orderData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
-                className="w-full resize-none rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:border-transparent focus:ring-2 focus:ring-green-2"
                 rows="3"
                 placeholder={
                   t.order?.fields?.anySpecialInstructions ||
@@ -843,10 +1226,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           </div>
         );
 
-      case 5:
+      case 4:
         return (
-          <div className="form-step space-y-6">
-            <div className="rounded-lg bg-gray-50 p-6">
+          <div className="space-y-6 form-step">
+            <div className="p-6 rounded-lg bg-gray-50">
               <h3 className="mb-4 text-lg font-semibold text-green-3">
                 {t.order?.fields?.orderSummary || "Order Summary"}
               </h3>
@@ -902,7 +1285,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     {orderData.backgroundColor ? (
                       <>
                         <div
-                          className="h-4 w-4 rounded border border-gray-300"
+                          className="w-4 h-4 border border-gray-300 rounded"
                           style={{ backgroundColor: orderData.backgroundColor }}
                         ></div>
                         {orderData.backgroundColor}
@@ -913,26 +1296,63 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   </span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span>
-                    {t.order?.fields?.customerImage || "Customer Image"}:
-                  </span>
-                  <span className="font-medium">
-                    {orderData.imageUrl ? (
-                      <span className="text-green-600">
-                        ✅ {t.order?.fields?.attached || "Attached"} (
-                        {t.order?.fields?.willBeSentViaWhatsApp ||
-                          "will be sent via WhatsApp"}
-                        )
-                      </span>
-                    ) : (
-                      t.order?.fields?.notProvided || "Not provided"
-                    )}
+                  <span>Package Type:</span>
+                  <span className="font-medium capitalize">
+                    {orderData.packageType === 'premium' ? '✨ Premium Package' : '📦 Free Package'}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-lg bg-blue-50 p-6">
+            {/* Total Price Display */}
+            {orderData.sizeId && sizePrices[orderData.sizeId] && (() => {
+              const priceInfo = sizePrices[orderData.sizeId];
+              const categoryCode = categories.find(c => c.id === orderData.categoryId)?.code;
+              
+              // Per-person charge
+              const needsPersonCharge = categoryCode === 'OIL' || categoryCode === 'CUTE';
+              const personCharge = needsPersonCharge && orderData.numberOfPersons > 1 
+                ? (orderData.numberOfPersons - 1) * 450 
+                : 0;
+              
+              // Cute Collection charge
+              const cuteCollectionCharge = categoryCode === 'CUTE' ? 450 : 0;
+              
+              // Premium package charge
+              const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
+              
+              const totalPrice = priceInfo.final_price + personCharge + cuteCollectionCharge + packageCharge;
+              
+              return (
+                <div className="p-6 border-2 rounded-lg bg-green-50 border-green-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-semibold text-green-3">Total Price</h4>
+                    <div className="text-right">
+                      <p className="text-3xl font-bold text-green-3">
+                        LKR {totalPrice.toLocaleString()}
+                      </p>
+                      <div className="mt-2 space-y-1 text-xs text-gray-600">
+                        <p>Base: LKR {priceInfo.base_price.toLocaleString()}</p>
+                        {priceInfo.price_increment > 0 && (
+                          <p>Category Charge: + LKR {priceInfo.price_increment.toLocaleString()}</p>
+                        )}
+                        {cuteCollectionCharge > 0 && (
+                          <p>Cute Collection: + LKR {cuteCollectionCharge.toLocaleString()}</p>
+                        )}
+                        {personCharge > 0 && (
+                          <p>Additional Persons: + LKR {personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} × Rs. 450)</p>
+                        )}
+                        {packageCharge > 0 && (
+                          <p>Premium Package: + LKR {packageCharge.toLocaleString()}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div className="p-6 rounded-lg bg-blue-50">
               <h4 className="mb-4 font-semibold text-green-3">
                 {t.order?.fields?.customerInformation || "Customer Information"}
               </h4>
@@ -977,7 +1397,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             </div>
 
             <div className="form-group">
-              <label className="mb-3 block font-medium text-green-3">
+              <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.specialInstructions || "Special Instructions"}{" "}
                 <span className="text-sm font-normal text-gray-500">
                   ({t.order?.fields?.optional || "Optional"})
@@ -986,7 +1406,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               <textarea
                 value={orderData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
-                className="w-full resize-none rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-green-2"
+                className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:border-transparent focus:ring-2 focus:ring-green-2"
                 rows="3"
                 placeholder={
                   t.order?.fields?.specialInstructionsPlaceholder ||
@@ -994,33 +1414,6 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 }
               />
             </div>
-
-            {orderData.imageUrl && (
-              <div className="rounded border-l-4 border-green-400 bg-green-50 p-4">
-                <div className="flex">
-                  <svg
-                    className="mr-2 mt-0.5 h-5 w-5 text-green-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <div className="text-sm text-green-700">
-                    <p className="font-medium">📸 Image Delivery Information</p>
-                    <p className="mt-1">
-                      Your uploaded image will be sent to the seller via
-                      WhatsApp along with your order details. You may also be
-                      asked to send the image directly to the seller's WhatsApp
-                      for best quality.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         );
 
@@ -1030,16 +1423,16 @@ const OrderPage = ({ language, translations, onPageChange }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-light py-8">
-      <div className="max-w-container mx-auto px-5">
+    <div className="min-h-screen py-8 bg-gray-light">
+      <div className="px-5 mx-auto max-w-container">
         {/* Header with back button */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => onPageChange && onPageChange("home")}
-            className="flex items-center gap-2 text-green-2 transition-colors hover:text-green-1"
+            className="flex items-center gap-2 transition-colors text-green-2 hover:text-green-1"
           >
             <svg
-              className="h-5 w-5"
+              className="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -1065,9 +1458,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           </p>
         </div>
 
-        <div className="mx-auto max-w-4xl rounded-custom bg-white p-8 shadow-lg">
+        <div className="max-w-4xl p-8 mx-auto bg-white shadow-lg rounded-custom">
           {/* Progress Steps */}
-          <div className="relative mb-10 flex justify-between">
+          <div className="relative flex justify-between mb-10">
             {steps.map((step, index) => (
               <div key={step.id} className="relative flex-1 text-center">
                 <div
@@ -1102,7 +1495,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           <div className="mb-8">{renderStep()}</div>
 
           {/* Navigation Buttons */}
-          <div className="mt-8 flex justify-between border-t border-gray-200 pt-6">
+          <div className="flex justify-between pt-6 mt-8 border-t border-gray-200">
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
@@ -1115,17 +1508,17 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               {t.order?.buttons?.previous || "Previous"}
             </button>
 
-            {currentStep < 5 ? (
+            {currentStep < 4 ? (
               <button
                 onClick={nextStep}
-                className="rounded-lg bg-green-2 px-8 py-4 font-semibold text-white transition-colors hover:bg-green-1"
+                className="px-8 py-4 font-semibold text-white transition-colors rounded-lg bg-green-2 hover:bg-green-1"
               >
                 {t.order?.buttons?.nextStep || "Next Step"}
               </button>
             ) : (
               <button
                 onClick={submitOrder}
-                className="rounded-lg bg-green-1 px-10 py-4 font-semibold text-white transition-colors hover:bg-green-3"
+                className="px-10 py-4 font-semibold text-white transition-colors rounded-lg bg-green-1 hover:bg-green-3"
               >
                 {t.order?.buttons?.placeOrder || "Place Order"}
               </button>
@@ -1133,6 +1526,42 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           </div>
         </div>
       </div>
+
+      {/* Frame Preview Modal - Click to zoom */}
+      {framePreviewModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-90"
+          onClick={() => setFramePreviewModal(null)}
+        >
+          <div className="relative max-h-[80vh] max-w-2xl w-full">
+            <img
+              src={framePreviewModal}
+              alt="Frame preview"
+              className="h-auto w-full rounded-lg shadow-2xl object-contain max-h-[80vh]"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setFramePreviewModal(null)}
+              className="absolute p-2 text-gray-700 transition-colors bg-white rounded-full shadow-lg -right-4 -top-4 hover:bg-gray-100"
+              aria-label="Close preview"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -117,11 +117,6 @@ export const translations = {
         selectPersons: "Select number of persons",
         backgroundColor: "Background Color",
         selectBackgroundColor: "Select a background color",
-        uploadImage: "Upload Your Image",
-        uploadImageOptional: "Upload Your Image (Optional)",
-        chooseFile: "Choose File",
-        imageSelected: "Image Selected",
-        removeImage: "Remove Image",
 
         // Step 3 - Frame & Size
         frameType: "Frame Type",
@@ -327,11 +322,6 @@ export const translations = {
         selectPersons: "පුද්ගලයන් සංඛ්‍යාව තෝරන්න",
         backgroundColor: "පසුබිම් වර්ණය",
         selectBackgroundColor: "පසුබිම් වර්ණයක් තෝරන්න",
-        uploadImage: "ඔබේ ඡායාරූප උඩුගත කරන්න",
-        uploadImageOptional: "ඔබේ ඡායාරූප උඩුගත කරන්න (විකල්ප)",
-        chooseFile: "ගොනුවක් තෝරන්න",
-        imageSelected: "ඡායාරූප තෝරා ගන්නා ලදී",
-        removeImage: "ඡායාරූප ඉවත් කරන්න",
 
         // Step 3 - Frame & Size
         frameType: "රාමු වර්ගය",

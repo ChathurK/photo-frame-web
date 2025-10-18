@@ -52,7 +52,7 @@ const GallerySection = ({ language, translations }) => {
   // Desktop Expandable Card Component
   const ExpandableCard = ({ collection, index }) => {
     return (
-      <div className="relative h-[500px] flex-1 cursor-pointer overflow-hidden rounded-xl duration-[600ms] ease-in-out hover:flex-[3]">
+      <div className="relative h-[500px] flex-1 cursor-pointer overflow-hidden rounded-xl duration-[600ms] ease-in-out hover:flex-[2]">
         <img
           src={collection.images[index]}
           alt={`${collection.name} ${index + 1}`}
@@ -86,15 +86,15 @@ const GallerySection = ({ language, translations }) => {
   };
 
   return (
-    <section id="gallery" className="pb-12 pt-4 max-sm:pt-10">
-      <div className="container mx-auto px-4">
+    <section id="gallery" className="pt-4 pb-12 max-sm:pt-10">
+      <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-12 text-center">
           {/* Badge */}
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-green-2/10 px-4 py-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-2 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full bg-green-2/10">
+            <span className="relative flex w-2 h-2">
+              <span className="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-green-2"></span>
+              <span className="relative inline-flex w-2 h-2 rounded-full bg-green-2"></span>
             </span>
             <span className="text-xs font-semibold text-green-2 md:text-sm">
               {lang.gallery?.badge ?? "Featured Collections"}
@@ -104,7 +104,7 @@ const GallerySection = ({ language, translations }) => {
           <h2 className="mb-4 text-4xl font-bold text-green-3 md:text-5xl">
             {lang.gallery?.title}
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-gray-600 md:text-lg">
+          <p className="max-w-2xl mx-auto text-base text-gray-600 md:text-lg">
             {lang.gallery?.description}
           </p>
         </div>
@@ -145,7 +145,7 @@ const GallerySection = ({ language, translations }) => {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-14 rounded-xl bg-gradient-to-r from-green-2/10 to-green-1/10 p-12 text-center">
+        <div className="p-12 text-center mt-14 rounded-xl bg-gradient-to-r from-green-2/10 to-green-1/10">
           <h3 className="mb-4 text-2xl font-bold text-green-3 md:text-3xl">
             {lang.gallery.cta.title ?? "Ready to Create Your Own?"}
           </h3>
@@ -158,12 +158,12 @@ const GallerySection = ({ language, translations }) => {
                 .getElementById("order")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="group relative overflow-hidden rounded-lg bg-green-2 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-1 hover:shadow-xl"
+            className="relative px-8 py-4 overflow-hidden font-semibold text-white transition-all duration-300 rounded-lg shadow-lg group bg-green-2 hover:scale-105 hover:bg-green-1 hover:shadow-xl"
           >
             <span className="relative z-10">
               {lang.gallery.cta.btn ?? "Start Your Order"}
             </span>
-            <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-1 to-green-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+            <div className="absolute inset-0 transition-opacity duration-300 opacity-0 -z-0 bg-gradient-to-r from-green-1 to-green-2 group-hover:opacity-100"></div>
           </button>
         </div>
       </div>

@@ -16,7 +16,6 @@ const testOrder = async () => {
         deliveryTo: 'Sri Lanka',
         numberOfPersons: 1,
         backgroundColor: '#ffffff',
-        imageUrl: null,
         notes: 'Test order'
       })
     });

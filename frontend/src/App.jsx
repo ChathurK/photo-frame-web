@@ -30,7 +30,7 @@ function App() {
       <LanguageSelector onLanguageSelect={handleLanguageSelect} />
 
       {currentPage === "home" ? (
-        <div className="mx-auto max-w-full">
+        <div className="max-w-screen-xl mx-auto">
           <Header
             language={selectedLanguage}
             translations={translations}
@@ -58,7 +58,7 @@ function App() {
             translations={translations}
             onPageChange={handlePageChange}
           />
-          <Footer language={selectedLanguage} translations={translations} />
+          
           <ScrollerToTopBtn />
         </div>
       ) : (
@@ -68,7 +68,9 @@ function App() {
           onPageChange={handlePageChange}
         />
       )}
+      <Footer language={selectedLanguage} translations={translations} />
       <ScreenSizeIndicator />
+      
     </div>
   );
 }

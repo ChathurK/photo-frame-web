@@ -7,7 +7,7 @@ export const getAllOrders = async (req, res) => {
       SELECT o.*, 
              oi.id as item_id, oi.category_id, oi.design_sample_id, oi.frame_type_id, 
              oi.size_id, oi.frame_color_id, oi.number_of_persons, oi.background_color, 
-             oi.image_url, oi.notes,
+             oi.package_type, oi.notes,
              c.name as category_name, c.code as category_code,
              ds.display_name as design_sample_name,
              ft.name as frame_type_name, ft.material as frame_material,
@@ -81,6 +81,7 @@ export const createOrder = async (req, res) => {
       frameTypeId,
       sizeId,
       frameColorId,
+      packageType,
       customerName,
       customerAddress,
       customerWhatsapp,
@@ -89,7 +90,6 @@ export const createOrder = async (req, res) => {
       totalAmount,
       numberOfPersons,
       backgroundColor,
-      imageUrl,
       notes
     } = req.body;
 
@@ -112,7 +112,7 @@ export const createOrder = async (req, res) => {
 
     // Insert order item (convert undefined to null for MySQL)
     await connection.execute(
-      `INSERT INTO order_items (order_id, category_id, design_sample_id, frame_type_id, size_id, frame_color_id, number_of_persons, background_color, image_url, notes) 
+      `INSERT INTO order_items (order_id, category_id, design_sample_id, frame_type_id, size_id, frame_color_id, number_of_persons, background_color, package_type, notes) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         orderId, 
@@ -123,7 +123,7 @@ export const createOrder = async (req, res) => {
         frameColorId || null, 
         numberOfPersons || 1, 
         backgroundColor || null, 
-        imageUrl || null, 
+        packageType || 'free',
         notes || null
       ]
     );
