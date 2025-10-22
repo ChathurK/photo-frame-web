@@ -508,6 +508,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
           totalPrice += packageCharge;
         }
         
+        // Mini Frames delivery fee
+        const deliveryFee = categoryCode === 'MINI' ? 450 : 0;
+        if (deliveryFee > 0) {
+          priceBreakdown += `• Delivery Fee: Rs. ${deliveryFee.toLocaleString()}\n`;
+          totalPrice += deliveryFee;
+        }
+        
         priceBreakdown += `━━━━━━━━━━━━━━━━\n`;
         priceBreakdown += `*TOTAL: Rs. ${totalPrice.toLocaleString()}*\n\n`;
       }
@@ -546,21 +553,21 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       
       message +=
         `━━━━━━━━━━━━━━━━\n` +
-        `👤 *CUSTOMER INFO*\n` +
+        `*CUSTOMER INFO*\n` +
         `━━━━━━━━━━━━━━━━\n` +
         `• Name: ${orderData.customerName}\n` +
         `• WhatsApp: ${orderData.customerWhatsapp}\n` +
         `• Address: ${orderData.customerAddress}\n\n` +
-        `🚚 *DELIVERY INFO*\n` +
+        `*DELIVERY INFO*\n` +
         `━━━━━━━━━━━━━━━━\n` +
         `• Location: ${orderData.deliveryTo || orderData.customerAddress}\n` +
         `• Preferred Date: ${orderData.deliveryDate ? new Date(orderData.deliveryDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }) : "Not specified"}\n\n`;
 
       if (orderData.notes) {
-        message += `📝 *SPECIAL NOTES*\n${orderData.notes}\n\n`;
+        message += `*SPECIAL NOTES*\n${orderData.notes}\n\n`;
       }
 
-      message += `━━━━━━━━━━━━━━━━\n✅ Order Confirmed!\nThank you for your order! 🙏`;
+      message += `━━━━━━━━━━━━━━━━\n✅ Order Confirmed!`;
 
       const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+94702923943";
       const whatsappUrl = `https://wa.me/${whatsappNumber.replace("+", "")}?text=${encodeURIComponent(message)}`;
@@ -795,6 +802,31 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         }
                         className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                       />
+                    </div>
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
+            {/* Delivery Fee Notice - Only for Mini Frames */}
+            {orderData.categoryId && (() => {
+              const selectedCategory = categories.find(
+                (cat) => cat.id === parseInt(orderData.categoryId)
+              );
+              const categoryCode = selectedCategory?.code;
+              return categoryCode === 'MINI' ? (
+                <div className="p-4 border-l-4 border-blue-400 rounded-lg bg-blue-50">
+                  <div className="flex items-start">
+                    <svg className="flex-shrink-0 w-5 h-5 mt-0.5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-blue-800">
+                        📦 Delivery Fee Applicable
+                      </p>
+                      <p className="mt-1 text-sm text-blue-700">
+                        Mini Frames category includes a delivery fee of <strong>Rs. 450</strong>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1132,7 +1164,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 // Premium package charge
                 const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
                 
-                const totalPrice = basePrice + personCharge + packageCharge;
+                // Mini Frames delivery fee
+                const deliveryFee = categoryCode === 'MINI' ? 450 : 0;
+                
+                const totalPrice = basePrice + personCharge + packageCharge + deliveryFee;
                 
                 return (
                   <div className="p-4 mt-4 border border-green-200 rounded-lg bg-green-50">
@@ -1173,6 +1208,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           {packageCharge > 0 && (
                             <p>
                               + LKR {packageCharge.toLocaleString()} (Premium Package)
+                            </p>
+                          )}
+                          {deliveryFee > 0 && (
+                            <p>
+                              + LKR {deliveryFee.toLocaleString()} (Delivery Fee)
                             </p>
                           )}
                         </div>
@@ -1499,7 +1539,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               // Premium package charge
               const packageCharge = orderData.packageType === 'premium' ? 450 : 0;
               
-              const totalPrice = basePrice + personCharge + packageCharge;
+              // Mini Frames delivery fee
+              const deliveryFee = categoryCode === 'MINI' ? 450 : 0;
+              
+              const totalPrice = basePrice + personCharge + packageCharge + deliveryFee;
               
               return (
                 <div className="p-6 border-2 rounded-lg bg-green-50 border-green-3">
@@ -1528,6 +1571,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         )}
                         {packageCharge > 0 && (
                           <p>Premium Package: + LKR {packageCharge.toLocaleString()}</p>
+                        )}
+                        {deliveryFee > 0 && (
+                          <p>Delivery Fee: + LKR {deliveryFee.toLocaleString()}</p>
                         )}
                       </div>
                     </div>

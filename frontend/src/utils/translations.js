@@ -29,7 +29,7 @@ export const translations = {
       description:
         "Discover our curated collection of premium photo frames and artwork",
       _100Design: {
-        title: "100 Designs",
+        title: "Normal Designs",
         description:
           "Our extensive gallery of over 100 unique designs across various styles and themes",
       },
@@ -127,12 +127,12 @@ export const translations = {
         selectFrameColor: "Select a frame color",
 
         // Step 4 - Delivery Information
-        fullName: "Full Name",
-        enterFullName: "Enter your full name",
-        whatsappNumber: "WhatsApp Number",
-        enterWhatsappNumber: "Enter your WhatsApp number",
-        customerAddress: "Customer Address",
-        enterCompleteAddress: "Enter your complete address",
+        fullName: "Recipient Name",
+        enterFullName: "Enter recipient name",
+        whatsappNumber: "Recipient Contact Number",
+        enterWhatsappNumber: "Enter recipient contact number",
+        customerAddress: "Recipient Address",
+        enterCompleteAddress: "Enter recipient complete address",
         deliveryLocation: "Delivery Location",
         selectDeliveryLocation: "Select delivery location",
         sriLanka: "Sri Lanka",
