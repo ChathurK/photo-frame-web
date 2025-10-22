@@ -73,6 +73,7 @@ function App() {
         currentPage={currentPage}
       />
       <ScreenSizeIndicator />
+      
     </div>
   );
 }

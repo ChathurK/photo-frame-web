@@ -5,7 +5,8 @@ import {
   getFrameTypes,
   getSizes,
   getFrameColors,
-  getAllCustomers
+  getAllCustomers,
+  getPrice
 } from '../controllers/catalogController.js';
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.get('/frame-types/:categoryId', getFrameTypes);
 router.get('/sizes/:frameTypeId', getSizes);
 router.get('/frame-colors/:frameTypeId', getFrameColors);
 router.get('/customers', getAllCustomers);
+router.get('/prices/:frameTypeId/:sizeId', getPrice);
 
 export default router;

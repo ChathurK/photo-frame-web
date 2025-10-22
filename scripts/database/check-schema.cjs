@@ -1,3 +1,9 @@
+/**
+ * NOTE: The image_url column has been removed from the order_items table.
+ * Image upload functionality has been removed from the application.
+ * See: database/migrations/remove-image-url-column.sql
+ */
+
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 

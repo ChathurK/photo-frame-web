@@ -46,6 +46,11 @@ class ApiService {
   async getTestimonials() {
     return this.get("/testimonials");
   }
+
+  // Get price for frame type and size combination
+  async getPrice(frameTypeId, sizeId) {
+    return this.get(`/prices/${frameTypeId}/${sizeId}`);
+  }
 }
 
 export const apiService = new ApiService();

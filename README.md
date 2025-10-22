@@ -5,13 +5,21 @@ A full-stack web application for ordering custom photo frames with various desig
 ## 🚀 Features
 
 - **Multi-Category Support**: Oil Painting, 100 Designs, Cute Collections, Mini Frames
+- **Dynamic Pricing System**: 
+  - Comprehensive frame_prices table with 93+ price points
+  - Category-based price increments (e.g., +450 LKR for Cute Collections)
+  - Real-time price calculation based on frame type and size
 - **Customization Options**: 
-  - Multiple design samples per category
-  - Various frame types and colors
-  - Different size options
-  - Custom background colors
-  - Image upload support
-- **Customer Management**: Order tracking with customer details
+  - 100 design samples (DT1-DT100) for "100 Designs" category
+  - 15 different frame types across all categories
+  - 17 size options (standard and mini sizes)
+  - Frame color selection for Fiber frames (Black, White, Brown, Pinewood)
+  - Custom background colors via color picker
+  - Number of persons option (for oil paintings)
+- **Customer Management**: 
+  - Order tracking with customer details
+  - Delivery date scheduling
+  - Order total amount calculation
 - **WhatsApp Integration**: Direct order communication via WhatsApp
 - **Responsive Design**: Mobile-friendly interface built with Tailwind CSS
 - **Multi-language Support**: English and Sinhala translations
@@ -123,22 +131,45 @@ cd photo-frame-web
 
 ### 2. Database Setup
 
+#### Option A: Fresh Installation (Recommended)
 ```bash
 # Login to MySQL
 mysql -u root -p
 
 # Create database
-CREATE DATABASE photoframe;
+CREATE DATABASE photo;
 
-# Import schema
-mysql -u root -p photoframe < database/schema/updated_schema.sql
+# Import complete schema with all tables and data
+mysql -u root -p photo < database/schema/updated_schema.sql
+```
 
-# Import seed data (optional)
-mysql -u root -p photoframe < database/seeds/seed_data.sql
+This will create all 8 tables:
+- ✅ categories (with price_increment field)
+- ✅ frame_types (15 frame types)
+- ✅ sizes (17 sizes)
+- ✅ **frame_prices** (93 price points) ⭐ NEW!
+- ✅ frame_colors (8 color options)
+- ✅ design_samples (DT1-DT100)
+- ✅ orders
+- ✅ order_items (without image_url)
 
-# Or import from dumps
-mysql -u root -p photoframe < database/dumps/photoframe_categories.sql
-# Repeat for other dump files
+#### Option B: Migrate Existing Database
+If you have an existing database, run the migration:
+```bash
+mysql -u root -p photo < database/migrations/add-frame-prices-table.sql
+```
+
+This will:
+- Add `price_increment` column to categories
+- Create `frame_prices` table
+- Populate all pricing data
+- Add `delivery_date` column to orders
+
+#### Verify Installation
+```sql
+USE photo;
+SHOW TABLES;
+SELECT COUNT(*) FROM frame_prices; -- Should return 93
 ```
 
 ### 3. Backend Setup
@@ -156,7 +187,7 @@ cp .env.example .env
 # DB_HOST=localhost
 # DB_USER=root
 # DB_PASSWORD=your_password
-# DB_NAME=photoframe
+# DB_NAME=photo
 # DB_PORT=3307
 # API_PORT=3001
 

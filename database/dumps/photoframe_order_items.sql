@@ -32,7 +32,6 @@ CREATE TABLE `order_items` (
   `frame_color_id` bigint DEFAULT NULL,
   `number_of_persons` int DEFAULT NULL,
   `background_color` varchar(255) DEFAULT NULL,
-  `image_url` varchar(255) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),

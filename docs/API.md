@@ -105,7 +105,6 @@ Create a new order.
   "deliveryDate": "2025-10-15",
   "totalAmount": 5000.00,
   "backgroundColor": "#ffffff",
-  "imageUrl": "https://example.com/image.jpg",
   "notes": "Special instructions"
 }
 ```
@@ -214,9 +213,9 @@ Get design samples for a specific category.
   "data": [
     {
       "id": 1,
+      "code": "DT1",
       "category_id": 1,
-      "display_name": "Landscape Design",
-      "image_url": "/assets/oil-paint/1.jpg"
+      "display_name": "Landscape Design"
     }
   ]
 }
