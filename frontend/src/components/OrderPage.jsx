@@ -413,30 +413,89 @@ const OrderPage = ({ language, translations, onPageChange }) => {
   };
 
   const nextStep = () => {
-    // Validation based on current step
-    if (currentStep === 1 && !orderData.categoryId) {
-      alert("Please select a category");
-      return;
+    // Step 1: Category selection validation
+    if (currentStep === 1) {
+      if (!orderData.categoryId) {
+        alert("Please select a category");
+        return;
+      }
     }
-    if (currentStep === 2 && !orderData.frameTypeId) {
-      alert("Please select a frame type");
-      return;
+
+    // Step 2: Frame, Size, and conditional field validations
+    if (currentStep === 2) {
+      const selectedCategory = categories.find(c => c.id == orderData.categoryId);
+      const categoryCode = selectedCategory?.code;
+
+      // Check frame type
+      if (!orderData.frameTypeId) {
+        alert("Please select a frame type");
+        return;
+      }
+
+      // Check if frame requires color selection
+      const selectedFrameType = frameTypes.find(ft => ft.id == orderData.frameTypeId);
+      if (selectedFrameType?.allows_color && !orderData.frameColorId) {
+        alert("Please select a frame color");
+        return;
+      }
+
+      // Check size
+      if (!orderData.sizeId) {
+        alert("Please select a size");
+        return;
+      }
+
+      // Check design for 100 Designs category (REQUIRED)
+      if (categoryCode === 'HUNDRED' && !orderData.designSampleId) {
+        alert("Please select a design for 100 Designs category");
+        return;
+      }
     }
-    if (currentStep === 2 && !orderData.sizeId) {
-      alert("Please select a size");
-      return;
-    }
-    if (
-      currentStep === 3 &&
-      (!orderData.customerName ||
-        !orderData.customerWhatsapp ||
-        !orderData.customerAddress ||
-        !orderData.deliveryDate)
-    ) {
-      alert(
-        "Please fill in all required fields including delivery date before proceeding.",
-      );
-      return;
+
+    // Step 3: Customer information validation
+    if (currentStep === 3) {
+      // Validate customer name
+      if (!orderData.customerName || orderData.customerName.trim() === '') {
+        alert("Please enter your name");
+        return;
+      }
+
+      // Validate WhatsApp number
+      if (!orderData.customerWhatsapp || orderData.customerWhatsapp.trim() === '') {
+        alert("Please enter your WhatsApp number");
+        return;
+      }
+
+      // Validate WhatsApp number format (Sri Lankan format)
+      const whatsappNumber = orderData.customerWhatsapp.trim();
+      // Allow formats: 0771234567, +94771234567, 94771234567, 771234567
+      const phoneRegex = /^(\+94|94|0)?[7][0-9]{8}$/;
+      if (!phoneRegex.test(whatsappNumber.replace(/\s/g, ''))) {
+        alert("Please enter a valid Sri Lankan mobile number (e.g., 0771234567 or +94771234567)");
+        return;
+      }
+
+      // Validate address
+      if (!orderData.customerAddress || orderData.customerAddress.trim() === '') {
+        alert("Please enter your delivery address");
+        return;
+      }
+
+      // Validate delivery date
+      if (!orderData.deliveryDate) {
+        alert("Please select a preferred delivery date");
+        return;
+      }
+
+      // Check if delivery date is not in the past
+      const selectedDate = new Date(orderData.deliveryDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        alert("Please select a delivery date that is today or in the future");
+        return;
+      }
     }
 
     if (currentStep < 4) {
@@ -456,7 +515,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
   const sendWhatsAppSummary = async (orderData, orderId) => {
     try {
-      console.log("📱 Preparing WhatsApp summary for order:", orderId);
+      console.log("Preparing WhatsApp summary for order:", orderId);
 
       // Get selected names for better display
       const selectedCategory =
@@ -477,7 +536,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       if (priceInfo) {
         // For Cute Collection, final_price already includes the +450
         totalPrice = priceInfo.final_price || priceInfo.price_lkr || 0;
-        priceBreakdown += `💰 *Price Breakdown:*\n`;
+        priceBreakdown += `*Price Breakdown:*\n`;
         
         // Show breakdown differently for Cute Collection
         if (categoryCode === 'CUTE' && priceInfo.cute_collection_charge) {
@@ -521,15 +580,15 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
       // Create main order message
       let message =
-        `🖼️ *NEW PHOTO FRAME ORDER #${orderId}*\n\n` +
+        `*NEW PHOTO FRAME ORDER #${orderId}*\n\n` +
         `━━━━━━━━━━━━━━━━\n` +
-        `📋 *ORDER DETAILS*\n` +
+        `*ORDER DETAILS*\n` +
         `━━━━━━━━━━━━━━━━\n` +
         `• Category: ${selectedCategory}\n`;
       
       // Add design number for 100 Designs category
       if (categoryCode === 'HUNDRED' && orderData.designSampleId) {
-        message += `• Design: DT ${orderData.designSampleId} ✅\n`;
+        message += `• Design: DT ${orderData.designSampleId} \n`;
       }
       
       message += 
@@ -546,7 +605,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         }
       }
       
-      message += `• Package: ${orderData.packageType === 'premium' ? '✨ Premium Package' : '📦 Free Package'}\n\n`;
+      message += `• Package: ${orderData.packageType === 'premium' ? 'Premium Package' : 'Free Package'}\n\n`;
       
       // Add price breakdown
       message += priceBreakdown;
@@ -567,7 +626,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
         message += `*SPECIAL NOTES*\n${orderData.notes}\n\n`;
       }
 
-      message += `━━━━━━━━━━━━━━━━\n✅ Order Confirmed!`;
+      message += `━━━━━━━━━━━━━━━━\nOrder Confirmed!`;
 
       const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+94702923943";
       const whatsappUrl = `https://wa.me/${whatsappNumber.replace("+", "")}?text=${encodeURIComponent(message)}`;
@@ -1231,6 +1290,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             <div className="form-group">
               <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.fullName || "Full Name"}
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -1242,11 +1302,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 placeholder={
                   t.order?.fields?.enterFullName || "Enter your full name"
                 }
+                required
               />
             </div>
             <div className="form-group">
               <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.whatsappNumber || "WhatsApp Number"}
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -1255,15 +1317,17 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   handleInputChange("customerWhatsapp", e.target.value)
                 }
                 className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
-                placeholder={
-                  t.order?.fields?.enterWhatsappNumber ||
-                  "Enter your WhatsApp number"
-                }
+                placeholder="0771234567 or +94771234567"
+                required
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Format: 0771234567 or +94771234567
+              </p>
             </div>
             <div className="form-group">
               <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.customerAddress || "Customer Address"}
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <textarea
                 value={orderData.customerAddress}
@@ -1276,6 +1340,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   t.order?.fields?.enterCompleteAddress ||
                   "Enter your complete address"
                 }
+                required
               />
             </div>
 
@@ -1373,6 +1438,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               <label className="block mb-3 font-medium text-green-3">
                 {t.order?.fields?.preferredDeliveryDate ||
                   "Preferred Delivery Date"}
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <div className="relative">
                 <DatePicker
@@ -1394,12 +1460,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     return today;
                   })()}
                   dateFormat="MMMM d, yyyy (EEEE)"
-                  placeholderText="Select delivery date"
+                  placeholderText="Select delivery date (Required)"
                   className="w-full p-4 text-lg transition-colors border-2 border-gray-300 rounded-lg cursor-pointer focus:border-green-3 focus:ring-2 focus:ring-green-2 hover:border-green-2"
                   calendarClassName="custom-calendar"
                   wrapperClassName="w-full"
                   showPopperArrow={false}
                   isClearable
+                  required
                 />
               </div>
               <p className="p-3 mt-2 text-sm text-gray-500 border border-blue-200 rounded-lg bg-blue-50">
@@ -1623,6 +1690,25 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                       )
                     : t.order?.fields?.notSpecified || "Not specified"}
                 </p>
+              </div>
+            </div>
+
+            {/* WhatsApp Image Notice */}
+            <div className="p-5 border-2 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border-green-3">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 text-3xl">
+                  📸
+                </div>
+                <div className="flex-1">
+                  <h4 className="mb-2 text-lg font-semibold text-green-3">
+                    Send Your Sample Image
+                  </h4>
+                  <p className="mb-3 text-sm leading-relaxed text-gray-700">
+                    Please send your sample photo(s) to our WhatsApp number after placing your order. 
+                    We'll use these images to create your custom photo frame.
+                  </p>
+                  
+                </div>
               </div>
             </div>
 
