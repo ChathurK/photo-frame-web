@@ -5,10 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import DesignGallery from "./DesignGallery";
 
 // Import sample images for categories
-import oilPaintSample from "../assets/oil paint collection/4.jpg"; // Oil Painting - keeping as is
-import miniFrameSample from "../assets/mini frames/12.jpg"; // Mini Frames
-import hundredDesignSample from "../assets/100 design collection final/DT 36.jpg"; // 100 Designs
-import cuteCollectionSample from "../assets/Ghibli collection/9.jpg"; // Cute Collection
+import oilPaintSample from "../assets/order_step1_imgs/CATEGORY_TITLE_1.jpg"; // Oil Painting - keeping as is
+import miniFrameSample from "../assets/order_step1_imgs/CATEGORY_TITLE_2.jpg"; // Mini Frames
+import hundredDesignSample from "../assets/order_step1_imgs/CATEGORY_TITLE_3.jpg"; // 100 Designs
+import cuteCollectionSample from "../assets/order_step1_imgs/CATEGORY_TITLE_4.jpg"; // Cute Collection
 // Additional samples for variety (keeping for fallback)
 import ghibliSample2 from "../assets/Ghibli collection/8.jpg";
 import oilPaintSample2 from "../assets/oil paint collection/6.jpg";
@@ -416,7 +416,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     // Step 1: Category selection validation
     if (currentStep === 1) {
       if (!orderData.categoryId) {
-        alert("Please select a category");
+        alert(t.order?.fields?.pleaseSelectCategory || "Please select a category");
         return;
       }
     }
@@ -426,28 +426,28 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       const selectedCategory = categories.find(c => c.id == orderData.categoryId);
       const categoryCode = selectedCategory?.code;
 
+      // Check design for 100 Designs category (REQUIRED)
+      if (categoryCode === 'HUNDRED' && !orderData.designSampleId) {
+        alert(t.order?.fields?.pleaseSelectNormalDesign || "Please select a design from Normal Designs category");
+        return;
+      }
+
       // Check frame type
       if (!orderData.frameTypeId) {
-        alert("Please select a frame type");
+        alert(t.order?.fields?.pleaseSelectFrameType || "Please select a frame type");
         return;
       }
 
       // Check if frame requires color selection
       const selectedFrameType = frameTypes.find(ft => ft.id == orderData.frameTypeId);
       if (selectedFrameType?.allows_color && !orderData.frameColorId) {
-        alert("Please select a frame color");
+        alert(t.order?.fields?.pleaseSelectFrameColor || "Please select a frame color");
         return;
       }
 
       // Check size
       if (!orderData.sizeId) {
-        alert("Please select a size");
-        return;
-      }
-
-      // Check design for 100 Designs category (REQUIRED)
-      if (categoryCode === 'HUNDRED' && !orderData.designSampleId) {
-        alert("Please select a design for 100 Designs category");
+        alert(t.order?.fields?.pleaseSelectFrameSize || "Please select frame size");
         return;
       }
     }
@@ -456,13 +456,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
     if (currentStep === 3) {
       // Validate customer name
       if (!orderData.customerName || orderData.customerName.trim() === '') {
-        alert("Please enter your name");
+        alert(t.order?.fields?.fillRecipientName || "Please fill in the recipient name");
         return;
       }
 
       // Validate WhatsApp number
       if (!orderData.customerWhatsapp || orderData.customerWhatsapp.trim() === '') {
-        alert("Please enter your WhatsApp number");
+        alert(t.order?.fields?.fillRecipientContact || "Please fill in the recipient contact number");
         return;
       }
 
@@ -471,19 +471,19 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       // Allow formats: 0771234567, +94771234567, 94771234567, 771234567
       const phoneRegex = /^(\+94|94|0)?[7][0-9]{8}$/;
       if (!phoneRegex.test(whatsappNumber.replace(/\s/g, ''))) {
-        alert("Please enter a valid Sri Lankan mobile number (e.g., 0771234567 or +94771234567)");
+        alert(t.order?.fields?.validRecipientContact || "Please enter a valid Sri Lankan mobile number (e.g., 0771234567 or +94771234567)");
         return;
       }
 
       // Validate address
       if (!orderData.customerAddress || orderData.customerAddress.trim() === '') {
-        alert("Please enter your delivery address");
+        alert(t.order?.fields?.fillRecipientAddress || "Please fill in the recipient address");
         return;
       }
 
       // Validate delivery date
       if (!orderData.deliveryDate) {
-        alert("Please select a preferred delivery date");
+        alert(t.order?.fields?.fillDeliveryDate || "Please select a preferred delivery date");
         return;
       }
 
@@ -711,16 +711,16 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 {t.order?.selectCategory || "Choose Your Style"}
               </h3>
               <p className="mb-8 leading-relaxed text-center text-gray-600">
-                Select the photo frame style that best matches your vision
+                {t.order?.selectCategoryDesc || "Select the photo frame style that best matches your vision"}
               </p>
             </div>
 
             {loading ? (
               <div className="text-center">
-                <p className="text-gray-500">Loading categories...</p>
+                <p className="text-gray-500">{t.order?.fields.loadingCategories || "Loading categories..."}</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-2 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
                 {categories.map((category) => (
                   <div
                     key={category.id}
@@ -731,11 +731,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                         : "bg-white hover:shadow-xl"
                     }`}
                   >
-                    <div className="relative">
+                    <div className="relative flex justify-center h-72">
                       <img
                         src={getCategorySampleImage(category.name, category.id)}
                         alt={category.name}
-                        className={`h-40 w-full object-cover transition-all duration-300 sm:h-48 ${
+                        className={`h-full w-full max-xl:w-52 object-cover transition-all duration-300 sm:h-72 ${
                           orderData.categoryId == category.id
                             ? "brightness-110"
                             : ""
@@ -760,17 +760,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                       )}
                       {/* Category type badge */}
                       <div className="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
-                        Click to Select
+                        {t.order?.fields.instruction || "Click to Select"}
                       </div>
                     </div>
                     <div className="p-4 bg-white">
-                      <h4 className="mb-2 text-lg font-semibold text-gray-800">
+                      <h4 className="text-lg font-semibold text-gray-800">
                         {category.name}
                       </h4>
-                      <p className="text-sm text-gray-600">
-                        {category.description ||
-                          "Beautiful custom photo frames in this style"}
-                      </p>
                     </div>
                   </div>
                 ))}
@@ -779,14 +775,14 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
             {!loading && categories.length === 0 && (
               <div className="text-center text-gray-500">
-                <p>No categories available at the moment.</p>
+                <p>{t.order?.fields.noCategoriesAvailable || "No categories available at the moment."}</p>
               </div>
             )}
 
             {orderData.categoryId && (
               <div className="mt-8 text-center">
                 <p className="inline-block px-4 py-3 font-medium rounded-lg bg-green-50 text-green-2">
-                  ✓ Selected:{" "}
+                  {t.order?.selection || "✓ Selected"}:&nbsp;
                   {categories.find((c) => c.id == orderData.categoryId)?.name}
                 </p>
               </div>
@@ -808,7 +804,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   <label className="block mb-3 font-medium text-green-3">
                     {t.order?.fields?.numberOfPersons || "Number of Persons"}
                     <span className="ml-2 text-sm font-normal text-gray-500">
-                      (+Rs. 450 per additional person)
+                      ({t.order?.fields?.numberOfPersonsDesc || "+Rs. 450 per additional person"})
                     </span>
                   </label>
                   <input
@@ -836,7 +832,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   <label className="block mb-3 font-medium text-green-3">
                     {t.order?.fields?.backgroundColor || "Background Color"}{" "}
                     <span className="text-sm font-normal text-gray-500">
-                      (Optional)
+                      ({t.order?.fields?.backgroundColorDesc || "Optional"})
                     </span>
                   </label>
                   <div className="flex items-center space-x-4">
@@ -881,10 +877,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     </svg>
                     <div className="ml-3">
                       <p className="text-sm font-medium text-blue-800">
-                        📦 Delivery Fee Applicable
+                        {t.order?.fields?.deliveryFeeNotice || "📦 Delivery Fee Applicable"}
                       </p>
-                      <p className="mt-1 text-sm text-blue-700">
-                        Mini Frames category includes a delivery fee of <strong>Rs. 450</strong>
+                      <p className="mt-1 text-sm text-blue-700"
+                        dangerouslySetInnerHTML={{
+                          __html: t.order?.fields?.deliveryFeeNoticeDesc ||
+                            "Mini Frames category includes a delivery fee of <strong>Rs. 450</strong>"
+                        }}>
                       </p>
                     </div>
                   </div>
@@ -903,6 +902,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   <DesignGallery
                     onSelectDesign={(designNum) => handleInputChange("designSampleId", designNum)}
                     selectedDesignId={orderData.designSampleId}
+                    translations={t.order?.fields}
                   />
                 </div>
               ) : null;
@@ -912,12 +912,12 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             <div className="form-group">
               <div className="mb-6 text-center">
                 <h3 className="mb-2 text-2xl font-bold text-green-3">
-                  {t.order?.fields?.frameType || "Select Frame Type"}
+                  {t.order?.fields?.frameType || "Frame Type"}
                 </h3>
                 <p className="text-gray-600">
                   {!orderData.categoryId 
-                    ? (t.order?.fields?.pleaseSelectCategory || "Please select a category first")
-                    : "Click on a frame to see preview and select"
+                    ? (t.order?.fields?.pleaseSelectCategory || "Please select a category")
+                    : (t.order?.fields?.selectFrameType || "Select a frame type that suits your style")
                   }
                 </p>
               </div>
@@ -966,7 +966,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                                     <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                                     </svg>
-                                    <p className="mt-2 text-sm">Preview</p>
+                                    <p className="mt-2 text-sm">{t.order?.fields.fallback || "Preview"}</p>
                                   </div>
                                 );
                               }
@@ -994,7 +994,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           
                           {/* Badge */}
                           <div className="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
-                            Click to Select
+                            {t.order?.fields.badge || "Click to Select"}
                           </div>
                         </div>
                         
@@ -1004,11 +1004,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                             {frameType.name}
                           </h4>
                           <p className="text-sm text-gray-600">
-                            Material: {frameType.material}
+                            {t.order?.fields.frameMaterial || "Material:"} {frameType.material}
                           </p>
                           {frameType.allows_color && (
                             <p className="mt-1 text-xs text-green-600">
-                              ✓ Multiple colors available
+                              {t.order?.fields.multipleAvl || "✓ Multiple colors available"}
                             </p>
                           )}
                         </div>
@@ -1022,7 +1022,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   <p className="mt-4 text-gray-600">
-                    {t.order?.fields?.pleaseSelectCategory || "Please select a category first"}
+                    {t.order?.fields?.pleaseSelectCategory || "Please select a category"}
                   </p>
                 </div>
               )}
@@ -1030,7 +1030,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               {orderData.frameTypeId && (
                 <div className="mt-6 text-center">
                   <p className="inline-block px-4 py-3 font-medium rounded-lg bg-green-50 text-green-2">
-                    ✓ Selected:{" "}
+                    {t.order?.selection || "✓ Selected"}:&nbsp;
                     {frameTypes.find((ft) => ft.id == orderData.frameTypeId)?.name}
                   </p>
                 </div>
@@ -1045,10 +1045,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               return selectedFrameType?.allows_color ? (
                 <div className="form-group">
                   <label className="block mb-3 font-medium text-green-3">
-                    Frame Color{" "}
-                    <span className="text-sm font-normal text-gray-500">
-                      (Optional)
-                    </span>
+                    {t.order?.fields.frameColor || "Frame Color"}
                   </label>
                   <select
                     value={orderData.frameColorId}
@@ -1057,7 +1054,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     }
                     className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
                   >
-                    <option value="">Choose color (optional)...</option>
+                    <option value="">{t.order?.fields.optionValue || "Select color..."}</option>
                     {frameColors.map((color) => (
                       <option key={color.id} value={color.id}>
                         {color.name}
@@ -1089,8 +1086,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     <div className="p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
                       <p className="text-gray-600">
                         👆 {language === 'si' 
-                          ? 'රාමුවේ පෙරදසුන බැලීමට වර්ණයක් තෝරන්න' 
-                          : 'Select a color above to see detailed frame preview'}
+                          ? t.order?.fields.beforePreview 
+                          : t.order?.fields.beforePreview}
                       </p>
                     </div>
                   </div>
@@ -1108,7 +1105,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 return (
                   <div className="form-group">
                     <label className="block mb-3 text-lg font-medium text-center text-green-3">
-                      🖼️ {language === 'si' ? 'රාමු පෙරදසුන' : 'Frame Preview'}
+                      🖼️ {language === 'si' ? t.order?.fields.framePreview : t.order?.fields.framePreview}
                     </label>
                     <div className="relative max-w-md p-4 mx-auto bg-white border-2 shadow-xl rounded-xl border-green-2 group">
                       <div 
@@ -1148,8 +1145,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           {selectedFrameType?.name}
                           {selectedColor && ` - ${selectedColor.name}`}
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">
-                          {language === 'si' ? '🔍 විශාල කිරීමට ක්ලික් කරන්න' : '🔍 Click to zoom and see details'}
+                        <p className="mt-1 text-sm text-gray-500">🔍&nbsp;
+                          {language === 'si' ? t.order?.fields.clickToZoom : t.order?.fields.clickToZoom}
                         </p>
                       </div>
                     </div>
@@ -1162,12 +1159,12 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
             <div className="form-group">
               <label className="block mb-3 font-medium text-green-3">
-                Size
+                {t.order?.fields.size || "Size"}
               </label>
               
               {!orderData.frameTypeId ? (
                 <div className="w-full p-4 text-gray-500 border border-gray-300 rounded-lg bg-gray-50">
-                  Please select a frame type first
+                  {t.order?.fields.pleaseSelectFrameType || "Please select a frame type"}
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -1196,7 +1193,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           <span className={`text-right font-bold ${
                             isSelected ? "text-green-3" : "text-gray-700"
                           }`}>
-                            LKR {priceInfo.final_price.toLocaleString()}
+                            {t.order?.fields.currency || "LKR"}&nbsp;{priceInfo.final_price.toLocaleString()}
                           </span>
                         )}
                       </button>
@@ -1233,7 +1230,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-700">
-                          Selected Size Price
+                          {t.order?.fields.selectedSizePrice || "Selected Size Price"}
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
                           {priceInfo.category_name || (isCuteCollection ? 'Cute Collections' : '')}
@@ -1241,14 +1238,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                       </div>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-green-3">
-                          LKR {totalPrice.toLocaleString()}
+                          {t.order?.fields.currency || "LKR"}&nbsp;{totalPrice.toLocaleString()}
                         </p>
                         <div className="mt-1 text-xs text-gray-500">
                           {isCuteCollection ? (
                             <>
                               <p>
-                                Frame: LKR {(basePrice - 450).toLocaleString()} + 
-                                LKR 450 (Cute Collection)
+                                {t.order?.fields.isCuteCollection || "Frame: LKR"}&nbsp;{(basePrice - 450).toLocaleString()}&nbsp;{t.order?.fields.isCuteCollection2 || "+ LKR 450 (Cute Collection)"}
                               </p>
                             </>
                           ) : (
@@ -1261,7 +1257,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           )}
                           {personCharge > 0 && (
                             <p>
-                              + LKR {personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} additional {orderData.numberOfPersons - 1 === 1 ? 'person' : 'persons'})
+                              +&nbsp;{t.order?.fields.currency || "LKR"}&nbsp;{personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} additional {orderData.numberOfPersons - 1 === 1 ? 'person' : 'persons'})
                             </p>
                           )}
                           {packageCharge > 0 && (
@@ -1271,7 +1267,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                           )}
                           {deliveryFee > 0 && (
                             <p>
-                              + LKR {deliveryFee.toLocaleString()} (Delivery Fee)
+                              +&nbsp;{t.order?.fields.currency || "LKR"}&nbsp;{deliveryFee.toLocaleString()}&nbsp;{t.order?.fields.deliveryFee || "(Delivery Fee)"}
                             </p>
                           )}
                         </div>
@@ -1307,7 +1303,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             </div>
             <div className="form-group">
               <label className="block mb-3 font-medium text-green-3">
-                {t.order?.fields?.whatsappNumber || "WhatsApp Number"}
+                {t.order?.fields?.whatsappNumber || "Recipient Contact Number"}
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
@@ -1317,11 +1313,11 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   handleInputChange("customerWhatsapp", e.target.value)
                 }
                 className="w-full p-4 border border-gray-300 rounded-lg focus:border-transparent focus:ring-2 focus:ring-green-2"
-                placeholder="0771234567 or +94771234567"
+                placeholder={t.order?.fields?.numberFormat || "0771234567 or +94771234567"}
                 required
               />
               <p className="mt-1 text-xs text-gray-500">
-                Format: 0771234567 or +94771234567
+                {t.order?.fields?.numberFormatText || "Format:"}&nbsp;{t.order?.fields?.numberFormat || "0771234567 or +94771234567"}
               </p>
             </div>
             <div className="form-group">
@@ -1336,10 +1332,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 }
                 className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:border-transparent focus:ring-2 focus:ring-green-2"
                 rows="3"
-                placeholder={
-                  t.order?.fields?.enterCompleteAddress ||
-                  "Enter your complete address"
-                }
+                placeholder={t.order?.fields?.enterCompleteAddress || "Enter your complete address"}
                 required
               />
             </div>
@@ -1368,7 +1361,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   <div className={`absolute top-0 left-0 right-0 px-4 py-2 text-center font-bold text-white ${
                     orderData.packageType === "free" ? "bg-green-3" : "bg-gray-700 bg-opacity-70"
                   }`}>
-                    Free Package
+                    {t.order?.fields?.freePackage || "Free Package"}
                   </div>
                   {orderData.packageType === "free" && (
                     <div className="absolute p-2 text-white rounded-full top-2 right-2 bg-green-3">
@@ -1397,8 +1390,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   <div className={`absolute top-0 left-0 right-0 px-4 py-2 text-center font-bold text-white ${
                     orderData.packageType === "premium" ? "bg-green-3" : "bg-gray-700 bg-opacity-70"
                   }`}>
-                    Premium Package
-                    <span className="block text-sm font-normal">+Rs. 450</span>
+                    {t.order?.fields?.premiumPackage || "Premium Package"}
+                    <span className="block text-sm font-normal">{t.order?.fields?.premiumPackageFee || "+ Rs. 450"}</span>
                   </div>
                   {orderData.packageType === "premium" && (
                     <div className="absolute p-2 text-white rounded-full top-2 right-2 bg-green-3">
@@ -1460,7 +1453,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                     return today;
                   })()}
                   dateFormat="MMMM d, yyyy (EEEE)"
-                  placeholderText="Select delivery date (Required)"
+                  placeholderText={t.order?.fields?.deliveryDatePlaceholder || "Select delivery date (Required)"}
                   className="w-full p-4 text-lg transition-colors border-2 border-gray-300 rounded-lg cursor-pointer focus:border-green-3 focus:ring-2 focus:ring-green-2 hover:border-green-2"
                   calendarClassName="custom-calendar"
                   wrapperClassName="w-full"
@@ -1580,9 +1573,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                   </span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span>Package Type:</span>
+                  <span>{t.order?.fields?.packageType2 || "Package Type:"}</span>
                   <span className="font-medium capitalize">
-                    {orderData.packageType === 'premium' ? '✨ Premium Package' : '📦 Free Package'}
+                    {orderData.packageType === 'premium' ? '✨ Premium' : '📦 Free'}&nbsp;{t.order?.fields?.package || "Package"}
                   </span>
                 </div>
               </div>
@@ -1614,33 +1607,33 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               return (
                 <div className="p-6 border-2 rounded-lg bg-green-50 border-green-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-green-3">Total Price</h4>
+                    <h4 className="text-lg font-semibold text-green-3">{t.order?.fields?.totalPrice || "Total Price"}</h4>
                     <div className="text-right">
                       <p className="text-3xl font-bold text-green-3">
-                        LKR {totalPrice.toLocaleString()}
+                        {t.order?.fields.currency || "LKR"}&nbsp;{totalPrice.toLocaleString()}
                       </p>
                       <div className="mt-2 space-y-1 text-xs text-gray-600">
                         {isCuteCollection ? (
                           <>
-                            <p>Frame: LKR {(basePrice - 450).toLocaleString()}</p>
-                            <p>Cute Collection: + LKR 450</p>
+                            <p>{t.order?.fields.isCuteCollection || "Frame: LKR"}&nbsp;{(basePrice - 450).toLocaleString()}</p>
+                            <p>Cute Collection: + {t.order?.fields.currency || "LKR"} 450</p>
                           </>
                         ) : (
                           <>
-                            <p>Base: LKR {(priceInfo.base_price || basePrice).toLocaleString()}</p>
+                            <p>{t.order?.fields?.basePrice || "Base Price"}: {t.order?.fields.currency} {(priceInfo.base_price || basePrice).toLocaleString()}</p>
                             {priceInfo.price_increment > 0 && (
-                              <p>Category Charge: + LKR {priceInfo.price_increment.toLocaleString()}</p>
+                              <p>{t.order?.fields?.categoryCharge || "Category Charge"}: + {t.order?.fields.currency} {priceInfo.price_increment.toLocaleString()}</p>
                             )}
                           </>
                         )}
                         {personCharge > 0 && (
-                          <p>Additional Persons: + LKR {personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} × Rs. 450)</p>
+                          <p>{t.order?.fields?.additionalPersons || "Additional Persons: + LKR"}&nbsp;{personCharge.toLocaleString()} ({orderData.numberOfPersons - 1} × {t.order?.fields.currency} 450)</p>
                         )}
                         {packageCharge > 0 && (
-                          <p>Premium Package: + LKR {packageCharge.toLocaleString()}</p>
+                          <p>{t.order?.fields?.premiumPackage || "Premium Package"}: + {t.order?.fields.currency} {packageCharge.toLocaleString()}</p>
                         )}
                         {deliveryFee > 0 && (
-                          <p>Delivery Fee: + LKR {deliveryFee.toLocaleString()}</p>
+                          <p>{t.order?.fields?.deliveryFee2 || "Delivery Fee"}: + {t.order?.fields.currency} {deliveryFee.toLocaleString()}</p>
                         )}
                       </div>
                     </div>
@@ -1655,15 +1648,15 @@ const OrderPage = ({ language, translations, onPageChange }) => {
               </h4>
               <div className="space-y-2 text-sm">
                 <p>
-                  <strong>{t.order?.fields?.name2 || "Name"}:</strong>{" "}
+                  <strong>{t.order?.fields?.fullName || "Recipient Name"}:</strong>{" "}
                   {orderData.customerName}
                 </p>
                 <p>
-                  <strong>{t.order?.fields?.whatsapp || "WhatsApp"}:</strong>{" "}
+                  <strong>{t.order?.fields?.whatsapp2 || "Contact Number"}:</strong>{" "}
                   {orderData.customerWhatsapp}
                 </p>
                 <p>
-                  <strong>{t.order?.fields?.address || "Address"}:</strong>{" "}
+                  <strong>{t.order?.fields?.customerAddress || "Recipient Address"}:</strong>{" "}
                   {orderData.customerAddress}
                 </p>
                 <p>
@@ -1701,11 +1694,10 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 </div>
                 <div className="flex-1">
                   <h4 className="mb-2 text-lg font-semibold text-green-3">
-                    Send Your Sample Image
+                    {t.order?.fields?.sendImage || "Send Your Sample Image"}
                   </h4>
                   <p className="mb-3 text-sm leading-relaxed text-gray-700">
-                    Please send your sample photo(s) to our WhatsApp number after placing your order. 
-                    We'll use these images to create your custom photo frame.
+                    {t.order?.fields?.sendImageDesc || "Please send your sample photo(s) to our WhatsApp number after placing your order. We'll use these images to create your custom photo frame."}
                   </p>
                   
                 </div>
@@ -1725,8 +1717,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:border-transparent focus:ring-2 focus:ring-green-2"
                 rows="3"
                 placeholder={
-                  t.order?.fields?.specialInstructionsPlaceholder ||
-                  "Any special instructions for your order..."
+                  t.order?.fields?.anySpecialInstructions ||
+                  "Any special instructions or notes for your order..."
                 }
               />
             </div>
@@ -1760,18 +1752,18 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            Back to Home
+            {t.order?.backToHome || "Back to Home"}
           </button>
         </div>
 
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-4xl font-bold text-green-3">
-            {t.order?.title || "Order Your Frame"}
+            {t.order?.title || "Order Your Master Piece"}
           </h1>
-          <p className="text-gray-600">
+          {/* <p className="text-gray-600">
             {t.order?.subtitle ||
               "Create your perfect custom frame in just a few steps"}
-          </p>
+          </p> */}
         </div>
 
         <div className="max-w-4xl p-8 mx-auto bg-white shadow-lg rounded-custom">

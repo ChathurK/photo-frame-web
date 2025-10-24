@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
+const DesignGallery = ({ onSelectDesign, selectedDesignId, translations }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDesign, setSelectedDesign] = useState(selectedDesignId);
   const [modalImage, setModalImage] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   
+  const translatedFields = translations;
+
   const DESIGNS_PER_PAGE = 8; // 2x4 grid (2 rows, 4 columns)
   
   // Generate array of design numbers (1-100)
@@ -78,10 +80,10 @@ const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h3 className="text-xl font-semibold text-green-3 mb-1">
-              Select Your Design
+              {translatedFields?.selectDesign || "Select Your Preferred Design"}
             </h3>
-            <p className="text-sm text-gray-600">
-              Choose from {filteredDesigns.length} available designs
+            <p className="text-sm text-gray-600"
+              dangerouslySetInnerHTML={{ __html: (translatedFields?.selectDesignDesc || "Choose from {filteredDesigns.length} available designs").replace('{filteredDesigns.length}', filteredDesigns.length) }}>
             </p>
           </div>
           
@@ -89,10 +91,10 @@ const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
           <div className="relative w-full md:w-64">
             <input
               type="text"
-              placeholder="Search design number..."
+              placeholder={translatedFields?.searchFieldPlaceholder || "Search by design number..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-green-3 focus:ring-2 focus:ring-green-2"
+              className="w-full text-xs rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-green-3 focus:ring-2 focus:ring-green-2"
             />
             <svg
               className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
@@ -210,7 +212,7 @@ const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
                   : 'bg-green-2 text-white hover:bg-green-3'
               }`}
             >
-              Previous
+              {translatedFields?.prevBtn || "Previous"}
             </button>
             
             {/* Page Numbers (show max 5) */}
@@ -252,7 +254,7 @@ const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
                   : 'bg-green-2 text-white hover:bg-green-3'
               }`}
             >
-              Next
+              {translatedFields?.nextBtn || "Next"}
             </button>
           </div>
         </div>
@@ -267,7 +269,7 @@ const DesignGallery = ({ onSelectDesign, selectedDesignId }) => {
           <div className="relative max-w-4xl max-h-[90vh]">
             <button
               onClick={() => setModalImage(null)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+              className="absolute top-2 right-2 text-green-3 hover:text-green-700 transition-colors"
             >
               <svg
                 className="h-8 w-8"
