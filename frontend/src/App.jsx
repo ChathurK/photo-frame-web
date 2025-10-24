@@ -19,6 +19,7 @@ function App() {
 
   const handleLanguageSelect = (language) => {
     setSelectedLanguage(language);
+    localStorage.setItem("selectedLanguage", language);
   };
 
   const handlePageChange = (page) => {
@@ -35,6 +36,7 @@ function App() {
             language={selectedLanguage}
             translations={translations}
             onPageChange={handlePageChange}
+            onLanguageChange={handleLanguageSelect}
           />
           <HeroSection
             language={selectedLanguage}

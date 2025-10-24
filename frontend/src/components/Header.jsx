@@ -1,8 +1,8 @@
 import logo from "../assets/logo/FRAMESLK.COM_NEW_LOGO.png";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, LanguageIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-const Header = ({ language, translations, onPageChange }) => {
+const Header = ({ language, translations, onPageChange, onLanguageChange }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const lang = translations[language];
@@ -40,6 +40,10 @@ const Header = ({ language, translations, onPageChange }) => {
     }
   };
 
+  const toggleLanguage = () => {
+    onLanguageChange && onLanguageChange(language === "en" ? "si" : "en");
+  };
+
   return (
     <header className="container mx-auto flex items-center justify-between px-4 py-2">
       <div className="flex h-[50px] w-full items-center justify-between">
@@ -71,7 +75,7 @@ const Header = ({ language, translations, onPageChange }) => {
       {/* Desktop navigation */}
       <nav
         aria-label="navigation list"
-        className="hidden gap-4 md:flex lg:gap-8"
+        className="hidden items-center gap-4 md:flex lg:gap-8"
       >
         <a
           href="#gallery"
@@ -101,6 +105,17 @@ const Header = ({ language, translations, onPageChange }) => {
         >
           {lang.nav.promo}
         </a> */}
+        
+        {/* Desktop Language Switcher */}
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-2 whitespace-nowrap rounded-full border-2 border-green-2 px-3 py-1 font-medium text-green-2 transition-all duration-300 hover:bg-green-2 hover:text-white"
+          aria-label="Switch Language"
+        >
+          <LanguageIcon className="h-4 w-4" />
+          <span className="text-sm">{language === "en" ? "සිං" : "EN"}</span>
+        </button>
+
         <button
           className="whitespace-nowrap rounded-full bg-green-2 px-3 py-1 font-medium text-white transition-colors duration-300 hover:bg-green-1"
           onClick={() => onPageChange && onPageChange("order")}
@@ -134,6 +149,27 @@ const Header = ({ language, translations, onPageChange }) => {
                 {item.label}
               </a>
             ))}
+            
+            {/* Mobile Language Switcher */}
+            <button
+              onClick={() => {
+                toggleLanguage();
+                handleMenuItemClick();
+              }}
+              className={`flex w-full items-center justify-center gap-2 whitespace-nowrap px-2 py-1 text-center font-medium transition-colors duration-300 hover:text-green-2 ${
+                isClosing ? "animate-slideOutRight" : "animate-slideInRight"
+              }`}
+              style={{
+                animationDelay: isClosing
+                  ? "50ms"
+                  : `${menuItems.length * 100}ms`,
+                animationFillMode: "both",
+              }}
+            >
+              <LanguageIcon className="h-5 w-5" />
+              <span>{language === "en" ? "සිංහල" : "English"}</span>
+            </button>
+
             <button
               className={`w-full whitespace-nowrap px-2 py-1 text-center font-medium transition-colors duration-300 hover:text-green-2 ${
                 isClosing ? "animate-slideOutRight" : "animate-slideInRight"
@@ -141,7 +177,7 @@ const Header = ({ language, translations, onPageChange }) => {
               style={{
                 animationDelay: isClosing
                   ? "0ms"
-                  : `${menuItems.length * 100}ms`,
+                  : `${(menuItems.length + 1) * 100}ms`,
                 animationFillMode: "both",
               }}
               onClick={() => {
