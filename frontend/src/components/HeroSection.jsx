@@ -50,7 +50,7 @@ const HeroSection = ({ language, translations, onPageChange }) => {
           <div className="flex flex-col space-y-6 md:space-y-8">
             {/* Badge */}
             <div className="inline-flex gap-2 text-nowrap">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full bg-green-2/10 px-4 py-2 text-xs font-medium text-green-1 md:text-sm">
+              <div className="hidden sm:inline-flex w-fit items-center gap-2 rounded-full bg-green-2/10 px-4 py-2 text-xs font-medium text-green-1 md:text-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-2 opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-green-2"></span>

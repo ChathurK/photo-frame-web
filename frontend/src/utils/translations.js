@@ -9,7 +9,7 @@ export const translations = {
     },
     hero: {
       badge1: "Premium Quality Frames",
-      badge2: "Free Delivery",
+      badge2: "Free Delivery on Selected Categories",
       title: "Turn Your Memories Into Art",
       description:
         "Upload your photo, choose oil painting, Ghibli style, or more. Delivered as a beautiful framed artwork straight to your home.",
@@ -18,10 +18,10 @@ export const translations = {
       stat1: "Happy Customers",
       stat2: "Frames Created",
       stat3: "Recommended",
-      floating1Title: "Free Delivery",
+      floating1Title: "Fast Delivery",
       floating1Desc: "Island-wide",
       floating2Title: "Custom Design",
-      floating2Desc: "Made to Order",
+      floating2Desc: "Made for You",
     },
     gallery: {
       badge: "Featured Collections",

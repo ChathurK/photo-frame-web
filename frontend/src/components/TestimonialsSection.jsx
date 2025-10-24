@@ -1,4 +1,6 @@
-import { StarIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
+import TestimonialImg1 from "../assets/testimonial_imgs/TS-IMG-1.png";
+import TestimonialImg2 from "../assets/testimonial_imgs/TS-IMG-2.png";
+import TestimonialImg3 from "../assets/testimonial_imgs/TS-IMG-3.png";
 
 const TestimonialsSection = ({ language, translations }) => {
   const lang = translations[language];
@@ -7,14 +9,17 @@ const TestimonialsSection = ({ language, translations }) => {
     {
       text: "Absolutely loved the oil painting version of my family photo!",
       author: "Anushka",
+      photo: TestimonialImg1,
     },
     {
-      text: "ගිබ්ලි-ශෛලියේ රාමුව ඉන්ද්‍රජාලික විය. මගේ සහෝදරිය සඳහා පරිපූර්ණ තෑග්ගක්.",
-      author: "කසුන්",
+      text: "Customer service එක ඇත්තටම හොඳයි. Order එක ඉල්ලපු දවසටම ලැබුණා. Photo එකේ quality එක වගේම frame එකෙ quality එකත් ගොඩක් හොඳයි. Frames.lk එකට ස්තුතියි <3",
+      author: "Shehan J.",
+      photo: TestimonialImg3,
     },
     {
-      text: "Great service and quick delivery. Highly recommend.",
+      text: "Highly recommend! 💯 Great service and fast delivery. Friendly staff. Thank you..",
       author: "Nadeesha",
+      photo: TestimonialImg2,
     },
   ];
 
@@ -43,42 +48,52 @@ const TestimonialsSection = ({ language, translations }) => {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3 items-center">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
+              className="group relative h-fit overflow-hidden rounded-xl bg-white p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
               {/* Gradient overlay on hover */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br from-green-2 to-green-1 opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
-              ></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-green-2 to-green-1 opacity-0 transition-opacity duration-300 group-hover:opacity-5"></div>
 
-              {/* ChatBubble Icon */}
-              {/* <div
-                className={`mb-4 inline-flex rounded-xl bg-green-2/10 p-3`}
-              >
-                 <ChatBubbleLeftRightIcon className="h-8 w-8 text-green-2" />
-              </div> */}
+              {/* Content */}
+              <div className="relative">
+                {/* Quote SVG Icon */}
+                <div className="mb-4 inline-flex rounded-xl bg-green-2/10 p-3 transition-transform duration-300 group-hover:scale-110">
+                  <svg
+                    className="max-sm:size-7 size-8 text-green-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
 
-              {/* Testimonial Text */}
-              <p className="mb-2 text-base leading-relaxed text-gray-700">
-                "{testimonial.text}"
-              </p>
+                {/* Testimonial Text */}
+                <p className="mb-6 text-base leading-relaxed text-gray-700">
+                  "{testimonial.text}"
+                </p>
 
-              {/* Author */}
-              <div className="flex items-center">
-                <div>
-                  <strong className="block text-green-3">
-                    &ndash;&nbsp;{testimonial.author}
-                  </strong>
+                {/* Author with Avatar Photo */}
+                <div className="flex items-center gap-3">
+                  <div className="size-12 overflow-hidden rounded-full ring-2 ring-green-2/20">
+                    <img
+                      src={testimonial.photo}
+                      alt={testimonial.author}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <strong className="block text-green-3">
+                      {testimonial.author}
+                    </strong>
+                  </div>
                 </div>
               </div>
 
               {/* Bottom accent line */}
-              <div
-                className={`absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-green-2 to-green-1 transition-all duration-300 group-hover:w-full`}
-              ></div>
+              <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-green-2 to-green-1 transition-all duration-300 group-hover:w-full"></div>
             </div>
           ))}
         </div>

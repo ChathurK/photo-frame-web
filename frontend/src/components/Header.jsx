@@ -11,7 +11,7 @@ const Header = ({ language, translations, onPageChange }) => {
     { href: "#gallery", label: lang.nav.gallery },
     { href: "#about", label: lang.nav.about },
     { href: "#testimonials", label: lang.nav.testimonials },
-    { href: "#video", label: lang.nav.promo },
+    // { href: "#video", label: lang.nav.promo },
   ];
 
   const handleMenuToggle = () => {
@@ -94,13 +94,13 @@ const Header = ({ language, translations, onPageChange }) => {
         >
           {lang.nav.testimonials}
         </a>
-        <a
+        {/* <a
           href="#video"
           className="whitespace-nowrap px-2 py-1 font-medium transition-colors duration-300 hover:text-green-2"
           onClick={(e) => handleSmoothScroll(e, "#video")}
         >
           {lang.nav.promo}
-        </a>
+        </a> */}
         <button
           className="whitespace-nowrap rounded-full bg-green-2 px-3 py-1 font-medium text-white transition-colors duration-300 hover:bg-green-1"
           onClick={() => onPageChange && onPageChange("order")}
