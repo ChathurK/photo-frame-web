@@ -1541,7 +1541,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
                 </div>
                 <div className="flex justify-between py-1">
                   <span>{t.order?.fields?.frameType2 || "Frame Type"}:</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-right">
                     {frameTypes.find((f) => f.id == orderData.frameTypeId)
                       ?.name ||
                       t.order?.fields?.notSelected ||
