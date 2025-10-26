@@ -1,6 +1,6 @@
 class DatabaseService {
   constructor() {
-    this.apiBaseUrl = "http://localhost:3001/api";
+    this.apiBaseUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
     this.isClient = typeof window !== "undefined";
   }
 

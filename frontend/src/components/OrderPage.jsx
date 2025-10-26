@@ -280,7 +280,8 @@ const OrderPage = ({ language, translations, onPageChange }) => {
   const loadCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/api/categories");
+      const apiUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
+      const response = await fetch(`${apiUrl}/categories`);
       const result = await response.json();
       if (result.success) {
         // Sort categories in desired order: Oil Painting, Mini Frames, 100 Designs, Cute Collections
@@ -308,8 +309,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       const selectedCategory = categories.find(c => c.id == categoryId);
       const actualCategoryId = selectedCategory?.code === 'CUTE' ? 2 : categoryId;
       
+      const apiUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
       const response = await fetch(
-        `http://localhost:3001/api/frame-types/${actualCategoryId}`,
+        `${apiUrl}/frame-types/${actualCategoryId}`,
       );
       const result = await response.json();
       if (result.success) {
@@ -322,8 +324,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
   const loadSizes = async (frameTypeId) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
       const response = await fetch(
-        `http://localhost:3001/api/sizes/${frameTypeId}`,
+        `${apiUrl}/sizes/${frameTypeId}`,
       );
       const result = await response.json();
       if (result.success) {
@@ -344,11 +347,13 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       const selectedCategory = categories.find(c => c.id == orderData.categoryId);
       const isCuteCollection = selectedCategory?.code === 'CUTE';
       
+      const apiUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
+
       // Fetch price for each size
       for (const size of sizesData) {
         try {
           const response = await fetch(
-            `http://localhost:3001/api/prices/${frameTypeId}/${size.id}`,
+            `${apiUrl}/prices/${frameTypeId}/${size.id}`,
           );
           const result = await response.json();
           if (result.success) {
@@ -380,8 +385,9 @@ const OrderPage = ({ language, translations, onPageChange }) => {
 
   const loadFrameColors = async (frameTypeId) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL || "https://photo-frame-web-production.up.railway.app/api";
       const response = await fetch(
-        `http://localhost:3001/api/frame-colors/${frameTypeId}`,
+        `${apiUrl}/frame-colors/${frameTypeId}`,
       );
       const result = await response.json();
       if (result.success) {

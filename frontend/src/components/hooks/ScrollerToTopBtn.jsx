@@ -33,7 +33,7 @@ const ScrollerToTopBtn = () => {
 
   return (
     <div
-      className="fixed bottom-20 right-2 flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/30"
+      className="fixed bottom-20 right-2 z-50 flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/30"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
     >
       <ChevronUpIcon className="size-6 text-white" />

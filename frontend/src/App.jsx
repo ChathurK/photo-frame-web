@@ -74,7 +74,7 @@ function App() {
         translations={translations}
         currentPage={currentPage}
       />
-      <ScreenSizeIndicator />
+      {/* <ScreenSizeIndicator /> */}
       
     </div>
   );
