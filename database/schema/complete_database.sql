@@ -14,13 +14,20 @@ CREATE TABLE `categories` (
   `name` varchar(100) NOT NULL,
   `code` varchar(50) NOT NULL,
   `price_increment` decimal(10, 2) DEFAULT '0.00',
+  `price_increment` decimal(10, 2) DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 --
 -- Dumping data for table `categories`
 --
 LOCK TABLES `categories` WRITE;
+INSERT INTO `categories`
+VALUES (1, 'Oil Painting', 'OIL', 0.00),
+(2, '100 Designs', 'HUNDRED', 0.00),
+(3, 'Cute Collections', 'CUTE', 450.00),
+(4, 'Mini Frames', 'MINI', 0.00);
 INSERT INTO `categories`
 VALUES (1, 'Oil Painting', 'OIL', 0.00),
 (2, '100 Designs', 'HUNDRED', 0.00),
@@ -39,6 +46,7 @@ CREATE TABLE `design_samples` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `design_samples_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 101 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 ) ENGINE = InnoDB AUTO_INCREMENT = 101 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 --
 -- Dumping data for table `design_samples`
@@ -274,7 +282,6 @@ VALUES (
     1
   );
 UNLOCK TABLES;
-
 --
 -- Table structure for table `frame_colors`
 --
@@ -286,6 +293,7 @@ CREATE TABLE `frame_colors` (
   PRIMARY KEY (`id`),
   KEY `frame_type_id` (`frame_type_id`),
   CONSTRAINT `frame_colors_ibfk_1` FOREIGN KEY (`frame_type_id`) REFERENCES `frame_types` (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 33 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 ) ENGINE = InnoDB AUTO_INCREMENT = 33 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 --
 -- Dumping data for table `frame_colors`
@@ -360,7 +368,6 @@ VALUES (1, 6.00, 8.00, 'inch', '6 x 8'),
 (15, 4.00, 6.00, 'inch', '4 x 6'),
 (16, 5.00, 7.00, 'inch', '5 x 7');
 UNLOCK TABLES;
-
 --
 -- Table structure for table `frame_prices`
 --
@@ -370,11 +377,13 @@ CREATE TABLE `frame_prices` (
   `frame_type_id` int NOT NULL,
   `size_id` int NOT NULL,
   `price_lkr` decimal(10, 2) NOT NULL,
+  `price_lkr` decimal(10, 2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `frame_type_id` (`frame_type_id`),
   KEY `size_id` (`size_id`),
   CONSTRAINT `frame_prices_ibfk_1` FOREIGN KEY (`frame_type_id`) REFERENCES `frame_types` (`id`),
   CONSTRAINT `frame_prices_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `sizes` (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 144 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 ) ENGINE = InnoDB AUTO_INCREMENT = 144 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 --
 -- Dumping data for table `frame_prices`
@@ -472,8 +481,99 @@ VALUES (1, 1, 1, 2800.00),
 (140, 19, 14, 2500.00),
 (141, 20, 15, 1850.00),
 (142, 20, 16, 1500.00);
+INSERT INTO `frame_prices`
+VALUES (1, 1, 1, 2800.00),
+(2, 1, 2, 3400.00),
+(3, 1, 3, 3850.00),
+(4, 1, 4, 4200.00),
+(5, 1, 5, 4600.00),
+(6, 1, 6, 4950.00),
+(7, 1, 7, 5250.00),
+(8, 2, 1, 3100.00),
+(9, 2, 2, 3500.00),
+(10, 2, 3, 3950.00),
+(11, 2, 4, 4200.00),
+(12, 2, 5, 4750.00),
+(13, 2, 6, 5000.00),
+(14, 2, 7, 5500.00),
+(15, 3, 1, 2800.00),
+(16, 3, 2, 3400.00),
+(17, 3, 3, 3850.00),
+(18, 3, 4, 4100.00),
+(19, 3, 5, 4450.00),
+(20, 3, 6, 4750.00),
+(21, 3, 7, 4950.00),
+(22, 4, 1, 2750.00),
+(23, 4, 2, 3300.00),
+(24, 4, 3, 3650.00),
+(25, 4, 4, 3950.00),
+(26, 4, 5, 4150.00),
+(27, 4, 6, 4400.00),
+(28, 4, 7, 4750.00),
+(29, 5, 1, 2800.00),
+(30, 5, 3, 3700.00),
+(31, 5, 4, 4000.00),
+(32, 5, 5, 4350.00),
+(33, 5, 6, 4650.00),
+(34, 5, 7, 4950.00),
+(35, 6, 1, 3000.00),
+(36, 6, 2, 3450.00),
+(37, 6, 3, 3900.00),
+(38, 6, 4, 4200.00),
+(39, 6, 5, 4500.00),
+(40, 6, 6, 4950.00),
+(41, 6, 7, 5200.00),
+(42, 7, 1, 1950.00),
+(43, 7, 2, 2500.00),
+(44, 7, 3, 2850.00),
+(45, 7, 4, 3200.00),
+(46, 7, 5, 3550.00),
+(47, 7, 6, 3950.00),
+(48, 7, 7, 4250.00),
+(49, 8, 1, 2200.00),
+(50, 8, 2, 2600.00),
+(51, 8, 3, 2950.00),
+(52, 8, 4, 3200.00),
+(53, 8, 5, 3750.00),
+(54, 8, 6, 4100.00),
+(55, 8, 7, 4450.00),
+(56, 9, 1, 1950.00),
+(57, 9, 2, 2550.00),
+(58, 9, 3, 2850.00),
+(59, 9, 4, 3100.00),
+(60, 9, 5, 3450.00),
+(61, 9, 6, 3750.00),
+(62, 9, 7, 3950.00),
+(63, 10, 1, 1900.00),
+(64, 10, 2, 2450.00),
+(65, 10, 3, 2800.00),
+(66, 10, 4, 2950.00),
+(67, 10, 5, 3150.00),
+(68, 10, 6, 3400.00),
+(69, 10, 7, 3750.00),
+(70, 11, 1, 1950.00),
+(71, 11, 3, 2850.00),
+(72, 11, 4, 3150.00),
+(73, 11, 5, 3350.00),
+(74, 11, 6, 3650.00),
+(75, 11, 7, 3950.00),
+(76, 12, 1, 2250.00),
+(77, 12, 2, 2600.00),
+(78, 12, 3, 2950.00),
+(79, 12, 4, 3200.00),
+(80, 12, 5, 3550.00),
+(81, 12, 6, 3950.00),
+(82, 12, 7, 4250.00),
+(134, 19, 8, 850.00),
+(135, 19, 9, 950.00),
+(136, 19, 10, 1500.00),
+(137, 19, 11, 1950.00),
+(138, 19, 12, 1650.00),
+(139, 19, 13, 2250.00),
+(140, 19, 14, 2500.00),
+(141, 20, 15, 1850.00),
+(142, 20, 16, 1500.00);
 UNLOCK TABLES;
-
 --
 -- Table structure for table `orders`
 --
