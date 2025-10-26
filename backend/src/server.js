@@ -11,10 +11,17 @@ import { testConnection } from './config/database.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.API_PORT || 3001;
+const PORT = process.env.PORT || process.env.API_PORT || 3001;
+
+// CORS configuration for production
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,8 +40,8 @@ app.get('/api/health', (req, res) => {
 
 // Start server
 app.listen(PORT, async () => {
-  console.log(`🚀 API Server running on http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`🚀 API Server running on http://{backendURL}:${PORT}`);
+  console.log(`📊 Health check: http://{backendURL}:${PORT}/api/health`);
   await testConnection();
 });
 
