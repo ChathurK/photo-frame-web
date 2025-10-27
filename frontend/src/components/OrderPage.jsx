@@ -315,7 +315,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
       );
       const result = await response.json();
       if (result.success) {
-        setFrameTypes(result.data);
+        setFrameTypes(result.data.reverse()); // Reverse to show Plymount non margin first
       }
     } catch (error) {
       console.error("Error loading frame types:", error);
@@ -1858,7 +1858,7 @@ const OrderPage = ({ language, translations, onPageChange }) => {
             ) : (
               <button
                 onClick={submitOrder}
-                className="px-10 py-4 font-semibold text-white transition-colors rounded-lg bg-green-1 hover:bg-green-3"
+                className="px-8 py-4 font-semibold text-white transition-colors rounded-lg bg-green-1 hover:bg-green-3"
               >
                 {t.order?.buttons?.placeOrder || "Place Order"}
               </button>
