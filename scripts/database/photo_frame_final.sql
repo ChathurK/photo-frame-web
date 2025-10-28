@@ -1,0 +1,272 @@
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+--
+-- Host: switchback.proxy.rlwy.net    Database: photo
+-- ------------------------------------------------------
+-- Server version	9.4.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price_increment` decimal(10,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'Oil Painting','OIL',0.00),(2,'Normal Designs','HUNDRED',0.00),(3,'Cute Collections','CUTE',450.00),(4,'Mini Frames','MINI',0.00);
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `design_samples`
+--
+
+DROP TABLE IF EXISTS `design_samples`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `design_samples` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `design_samples_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `design_samples`
+--
+
+LOCK TABLES `design_samples` WRITE;
+/*!40000 ALTER TABLE `design_samples` DISABLE KEYS */;
+INSERT INTO `design_samples` VALUES (1,'DT1','Design 1',2),(2,'DT2','Design 2',2),(3,'DT3','Design 3',2),(4,'DT4','Design 4',2),(5,'DT5','Design 5',2),(6,'DT6','Design 6',2),(7,'DT7','Design 7',2),(8,'DT8','Design 8',2),(9,'DT9','Design 9',2),(10,'DT10','Design 10',2),(11,'DT11','Design 11',2),(12,'DT12','Design 12',2),(13,'DT13','Design 13',2),(14,'DT14','Design 14',2),(15,'DT15','Design 15',2),(16,'DT16','Design 16',2),(17,'DT17','Design 17',2),(18,'DT18','Design 18',2),(19,'DT19','Design 19',2),(20,'DT20','Design 20',2),(21,'DT21','Design 21',2),(22,'DT22','Design 22',2),(23,'DT23','Design 23',2),(24,'DT24','Design 24',2),(25,'DT25','Design 25',2),(26,'DT26','Design 26',2),(27,'DT27','Design 27',2),(28,'DT28','Design 28',2),(29,'DT29','Design 29',2),(30,'DT30','Design 30',2),(31,'DT31','Design 31',2),(32,'DT32','Design 32',2),(33,'DT33','Design 33',2),(34,'DT34','Design 34',2),(35,'DT35','Design 35',2),(36,'DT36','Design 36',2),(37,'DT37','Design 37',2),(38,'DT38','Design 38',2),(39,'DT39','Design 39',2),(40,'DT40','Design 40',2),(41,'DT41','Design 41',2),(42,'DT42','Design 42',2),(43,'DT43','Design 43',2),(44,'DT44','Design 44',2),(45,'DT45','Design 45',2),(46,'DT46','Design 46',2),(47,'DT47','Design 47',2),(48,'DT48','Design 48',2),(49,'DT49','Design 49',2),(50,'DT50','Design 50',2),(51,'DT51','Design 51',2),(52,'DT52','Design 52',2),(53,'DT53','Design 53',2),(54,'DT54','Design 54',2),(55,'DT55','Design 55',2),(56,'DT56','Design 56',2),(57,'DT57','Design 57',2),(58,'DT58','Design 58',2),(59,'DT59','Design 59',2),(60,'DT60','Design 60',2),(61,'DT61','Design 61',2),(62,'DT62','Design 62',2),(63,'DT63','Design 63',2),(64,'DT64','Design 64',2),(65,'DT65','Design 65',2),(66,'DT66','Design 66',2),(67,'DT67','Design 67',2),(68,'DT68','Design 68',2),(69,'DT69','Design 69',2),(70,'DT70','Design 70',2),(71,'DT71','Design 71',2),(72,'DT72','Design 72',2),(73,'DT73','Design 73',2),(74,'DT74','Design 74',2),(75,'DT75','Design 75',2),(76,'DT76','Design 76',2),(77,'DT77','Design 77',2),(78,'DT78','Design 78',2),(79,'DT79','Design 79',2),(80,'DT80','Design 80',2),(81,'DT81','Design 81',2),(82,'DT82','Design 82',2),(83,'DT83','Design 83',2),(84,'DT84','Design 84',2),(85,'DT85','Design 85',2),(86,'DT86','Design 86',2),(87,'DT87','Design 87',2),(88,'DT88','Design 88',2),(89,'DT89','Design 89',2),(90,'DT90','Design 90',2),(91,'DT91','Design 91',2),(92,'DT92','Design 92',2),(93,'DT93','Design 93',2),(94,'DT94','Design 94',2),(95,'DT95','Design 95',2),(96,'DT96','Design 96',2),(97,'DT97','Design 97',2),(98,'DT98','Design 98',2),(99,'DT99','Design 99',2),(100,'DT100','Design 100',2);
+/*!40000 ALTER TABLE `design_samples` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `frame_colors`
+--
+
+DROP TABLE IF EXISTS `frame_colors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `frame_colors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `frame_type_id` int NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `frame_type_id` (`frame_type_id`),
+  CONSTRAINT `frame_colors_ibfk_1` FOREIGN KEY (`frame_type_id`) REFERENCES `frame_types` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `frame_colors`
+--
+
+LOCK TABLES `frame_colors` WRITE;
+/*!40000 ALTER TABLE `frame_colors` DISABLE KEYS */;
+INSERT INTO `frame_colors` VALUES (1,5,'Black'),(2,5,'White'),(3,5,'Brown'),(4,5,'Pinewood'),(5,11,'Black'),(6,11,'White'),(7,11,'Brown'),(8,11,'Pinewood'),(9,1,'Black'),(10,2,'Black'),(11,3,'Black'),(12,4,'Black'),(13,6,'Black'),(14,7,'Black'),(15,8,'Black'),(16,9,'Black'),(17,10,'Black'),(18,12,'Black'),(19,19,'Black'),(20,20,'Black'),(21,1,'White'),(22,2,'White'),(23,3,'White'),(24,4,'White'),(25,6,'White'),(26,7,'White'),(27,8,'White'),(28,9,'White'),(29,10,'White'),(30,12,'White'),(31,19,'White'),(32,20,'White');
+/*!40000 ALTER TABLE `frame_colors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `frame_prices`
+--
+
+DROP TABLE IF EXISTS `frame_prices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `frame_prices` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `frame_type_id` int NOT NULL,
+  `size_id` int NOT NULL,
+  `price_lkr` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `frame_type_id` (`frame_type_id`),
+  KEY `size_id` (`size_id`),
+  CONSTRAINT `frame_prices_ibfk_1` FOREIGN KEY (`frame_type_id`) REFERENCES `frame_types` (`id`),
+  CONSTRAINT `frame_prices_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `sizes` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `frame_prices`
+--
+
+LOCK TABLES `frame_prices` WRITE;
+/*!40000 ALTER TABLE `frame_prices` DISABLE KEYS */;
+INSERT INTO `frame_prices` VALUES (1,1,1,2800.00),(2,1,2,3400.00),(3,1,3,3850.00),(4,1,4,4200.00),(5,1,5,4600.00),(6,1,6,4950.00),(7,1,7,5250.00),(8,2,1,3100.00),(9,2,2,3500.00),(10,2,3,3950.00),(11,2,4,4200.00),(12,2,5,4750.00),(13,2,6,5000.00),(14,2,7,5500.00),(15,3,1,2800.00),(16,3,2,3400.00),(17,3,3,3850.00),(18,3,4,4100.00),(19,3,5,4450.00),(20,3,6,4750.00),(21,3,7,4950.00),(22,4,1,2750.00),(23,4,2,3300.00),(24,4,3,3650.00),(25,4,4,3950.00),(26,4,5,4150.00),(27,4,6,4400.00),(28,4,7,4750.00),(29,5,1,2800.00),(30,5,3,3700.00),(31,5,4,4000.00),(32,5,5,4350.00),(33,5,6,4650.00),(34,5,7,4950.00),(35,6,1,3000.00),(36,6,2,3450.00),(37,6,3,3900.00),(38,6,4,4200.00),(39,6,5,4500.00),(40,6,6,4950.00),(41,6,7,5200.00),(42,7,1,1950.00),(43,7,2,2500.00),(44,7,3,2850.00),(45,7,4,3200.00),(46,7,5,3550.00),(47,7,6,3950.00),(48,7,7,4250.00),(49,8,1,2200.00),(50,8,2,2600.00),(51,8,3,2950.00),(52,8,4,3200.00),(53,8,5,3750.00),(54,8,6,4100.00),(55,8,7,4450.00),(56,9,1,1950.00),(57,9,2,2550.00),(58,9,3,2850.00),(59,9,4,3100.00),(60,9,5,3450.00),(61,9,6,3750.00),(62,9,7,3950.00),(63,10,1,1900.00),(64,10,2,2450.00),(65,10,3,2800.00),(66,10,4,2950.00),(67,10,5,3150.00),(68,10,6,3400.00),(69,10,7,3750.00),(70,11,1,1950.00),(71,11,3,2850.00),(72,11,4,3150.00),(73,11,5,3350.00),(74,11,6,3650.00),(75,11,7,3950.00),(76,12,1,2250.00),(77,12,2,2600.00),(78,12,3,2950.00),(79,12,4,3200.00),(80,12,5,3550.00),(81,12,6,3950.00),(82,12,7,4250.00),(134,19,8,850.00),(135,19,9,950.00),(136,19,10,1500.00),(137,19,11,1950.00),(138,19,12,1650.00),(139,19,13,2250.00),(140,19,14,2500.00),(144,20,15,2500.00),(145,20,15,2850.00),(146,20,16,1950.00);
+/*!40000 ALTER TABLE `frame_prices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `frame_types`
+--
+
+DROP TABLE IF EXISTS `frame_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `frame_types` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `material` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `allows_color` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `frame_types_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `frame_types`
+--
+
+LOCK TABLES `frame_types` WRITE;
+/*!40000 ALTER TABLE `frame_types` DISABLE KEYS */;
+INSERT INTO `frame_types` VALUES (1,1,'Plymount Box Frame with Plastic Beading','OIL_BOX_PLASTIC','Plymount',1),(2,1,'Plymount Embossed Frame','OIL_EMBOSSED','Plymount',1),(3,1,'Plymount Margine Frame','OIL_MARGIN','Plymount',1),(4,1,'Plymount Non-Margine Frame','OIL_NON_MARGIN','Plymount',1),(5,1,'Fiber Frame Normal Range','OIL_FIBER','Fiber',1),(6,1,'Plymount Box Frame Non-Margine','OIL_BOX_NON_MARGIN','Plymount',1),(7,2,'Plymount Box Frame with Plastic Beading','HUNDRED_BOX_PLASTIC','Plymount',1),(8,2,'Plymount Embossed Frame','HUNDRED_EMBOSSED','Plymount',1),(9,2,'Plymount Margine Frame','HUNDRED_MARGIN','Plymount',1),(10,2,'Plymount Non-Margine Frame','HUNDRED_NON_MARGIN','Plymount',1),(11,2,'Fiber Frame','HUNDRED_FIBER','Fiber',1),(12,2,'Plymount Box Frame Non-Margine','HUNDRED_BOX_NON_MARGIN','Plymount',1),(19,4,'Plymount Non-Margine','MINI_NON_MARGIN','Plymount',1),(20,4,'Plymount Embossed','MINI_EMBOSSED','Plymount',1);
+/*!40000 ALTER TABLE `frame_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_items`
+--
+
+DROP TABLE IF EXISTS `order_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
+  `category_id` int NOT NULL,
+  `design_sample_id` int DEFAULT NULL,
+  `frame_type_id` int NOT NULL,
+  `size_id` int NOT NULL,
+  `frame_color_id` int DEFAULT NULL,
+  `number_of_persons` int DEFAULT '1',
+  `background_color` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `package_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'free',
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `category_id` (`category_id`),
+  KEY `design_sample_id` (`design_sample_id`),
+  KEY `frame_type_id` (`frame_type_id`),
+  KEY `size_id` (`size_id`),
+  KEY `frame_color_id` (`frame_color_id`),
+  CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `order_items_ibfk_3` FOREIGN KEY (`design_sample_id`) REFERENCES `design_samples` (`id`),
+  CONSTRAINT `order_items_ibfk_4` FOREIGN KEY (`frame_type_id`) REFERENCES `frame_types` (`id`),
+  CONSTRAINT `order_items_ibfk_5` FOREIGN KEY (`size_id`) REFERENCES `sizes` (`id`),
+  CONSTRAINT `order_items_ibfk_6` FOREIGN KEY (`frame_color_id`) REFERENCES `frame_colors` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_items`
+--
+
+LOCK TABLES `order_items` WRITE;
+/*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
+INSERT INTO `order_items` VALUES (16,16,2,10,9,1,16,1,NULL,'premium',NULL),(17,17,3,NULL,12,2,30,2,NULL,'free',NULL),(18,18,3,NULL,11,4,7,1,NULL,'free',NULL),(19,19,1,NULL,3,5,11,1,NULL,'free',NULL),(20,20,3,NULL,10,5,17,1,NULL,'free',NULL),(21,21,2,11,11,1,7,1,NULL,'free',NULL),(22,22,4,NULL,20,15,20,1,NULL,'premium',NULL),(23,23,1,NULL,4,3,24,1,NULL,'premium',NULL),(24,24,1,NULL,4,7,24,1,'#f7ce46','premium',NULL),(25,25,2,2,10,3,17,1,NULL,'premium',NULL),(26,26,4,NULL,20,15,20,1,NULL,'free','Very good '),(27,27,4,NULL,20,15,20,1,NULL,'premium',NULL);
+/*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_address` text COLLATE utf8mb4_unicode_ci,
+  `customer_whatsapp` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `delivery_to` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `delivery_date` date DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (16,'Saman Edirimuni','Colombo ','0771234567','Sri Lanka','2025-11-01',0.00,'2025-10-26 21:14:38'),(17,'Anura Kumara','Sri Jayawardhanapura','0712783743','Sri Jayawardhanapura','2025-10-31',0.00,'2025-10-26 21:16:36'),(18,'Janaka','Kelaniya','0783674627','Kelaniya','2025-10-31',0.00,'2025-10-26 21:17:38'),(19,'Shsh','Shshsh','0746385296','Shshsh','2025-11-20',0.00,'2025-10-26 21:21:10'),(20,'Dhdhsh','Svsgag','0742538691','Svsgag','2025-11-01',0.00,'2025-10-26 21:26:09'),(21,'Dulan','horana','0764007562','Sri Lanka','2025-10-31',0.00,'2025-10-27 00:22:19'),(22,'Dulan','horana','0764007562','Sri Lanka','2025-10-31',0.00,'2025-10-27 01:14:06'),(23,'Rash','Kandy','0765448982','Sri Lanka','2025-10-31',0.00,'2025-10-27 05:41:19'),(24,'Rash','Kandy','0765448982','Sri Lanka','2025-10-31',0.00,'2025-10-27 05:49:54'),(25,'Chathura ','Colombo ','0776290645','Sri Lanka','2025-11-01',0.00,'2025-10-27 08:53:08'),(26,'Lasantha','132 Nisalagiriuyana Boralugoda poruwadandha','0720146036','132 Nisalagiriuyana Boralugoda poruwadandha','2025-11-01',0.00,'2025-10-27 18:54:36'),(27,'Dulan','Horana','0764007562','Sri Lanka','2025-11-01',0.00,'2025-10-28 10:06:23');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sizes`
+--
+
+DROP TABLE IF EXISTS `sizes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sizes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `width` decimal(5,2) DEFAULT NULL,
+  `height` decimal(5,2) DEFAULT NULL,
+  `unit` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sizes`
+--
+
+LOCK TABLES `sizes` WRITE;
+/*!40000 ALTER TABLE `sizes` DISABLE KEYS */;
+INSERT INTO `sizes` VALUES (1,6.00,8.00,'inch','6 x 8'),(2,8.00,10.00,'inch','8 x 10'),(3,8.00,12.00,'inch','8 x 12'),(4,10.00,12.00,'inch','10 x 12'),(5,10.00,15.00,'inch','10 x 15'),(6,12.00,15.00,'inch','12 x 15'),(7,12.00,18.00,'inch','12 x 18'),(8,3.00,3.00,'inch','3 x 3'),(9,4.00,4.00,'inch','4 x 4'),(10,4.00,8.00,'inch','4 x 8'),(11,4.00,12.00,'inch','4 x 12'),(12,8.00,8.00,'inch','8 x 8'),(13,8.00,10.00,'inch','8 x 10'),(14,8.00,16.00,'inch','8 x 16'),(15,4.00,6.00,'inch','4 x 6'),(16,5.00,7.00,'inch','5 x 7');
+/*!40000 ALTER TABLE `sizes` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-10-28 15:53:52
