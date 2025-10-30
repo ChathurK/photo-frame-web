@@ -256,7 +256,7 @@ export const translations = {
         email: "Email",
         location: "Location",
       },
-      copyright: "© 2025 FRAMESLK.COM • Crafted with Love 🤍",
+      copyright: "© 2025 FRAMESLK.ONLINE • Crafted with Love 🤍",
     },
   },
   si: {
@@ -515,7 +515,7 @@ export const translations = {
         email: "ඊමේල්",
         location: "ස්ථානය",
       },
-      copyright: "© 2025 FRAMESLK.COM • Crafted with Love 🤍",
+      copyright: "© 2025 FRAMESLK.ONLINE • Crafted with Love 🤍",
     },
   },
 };

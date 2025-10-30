@@ -174,7 +174,7 @@ const Footer = ({ language, translations, currentPage }) => {
 
         {/* Bottom Section */}
         <div className="flex items-center justify-center">
-          <p className="text-sm text-white/70">{lang.footer.copyright}</p>
+          <p className="text-sm text-white/70 max-sm:text-xs">{lang.footer.copyright}</p>
         </div>
       </div>
     </footer>
