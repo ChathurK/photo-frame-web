@@ -1,4 +1,4 @@
-import logo from "../assets/logo/frames-logo-09.png";
+import logo from "../assets/logo/frameslk.shop.black.png";
 import { Bars3Icon, XMarkIcon, LanguageIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -49,7 +49,7 @@ const Header = ({ language, translations, onPageChange, onLanguageChange }) => {
       <div className="flex h-[50px] w-full items-center justify-between">
         <button
           onClick={() => onPageChange && onPageChange("home")}
-          className="ml-[-9px] cursor-pointer md:ml-[-10px]"
+          className="ml-[-18px] cursor-pointer md:ml-[-25px]"
         >
           <img
             src={logo}

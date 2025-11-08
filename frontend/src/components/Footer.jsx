@@ -3,7 +3,7 @@ import {
   PhoneIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import logoWhite from "../assets/logo/frames-logo-09-white.png";
+import logoWhite from "../assets/logo/frameslk.shop.white.png";
 
 const Footer = ({ language, translations, currentPage }) => {
   const lang = translations[language];
@@ -93,7 +93,7 @@ const Footer = ({ language, translations, currentPage }) => {
             <img
               src={logoWhite}
               alt="FramesLK Logo"
-              className="mb-4 h-12 w-auto scale-[1.13]"
+              className="mb-4 h-14 w-auto ml-[-32px]"
             />
             <p className="mb-4 text-sm leading-relaxed text-white/80">
               {lang.footer?.sentence}
